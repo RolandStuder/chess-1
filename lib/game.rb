@@ -9,7 +9,7 @@ class Game
             populate_board
             create_players
         else
-            retore_game
+            restore_game
         end
 
         display_board

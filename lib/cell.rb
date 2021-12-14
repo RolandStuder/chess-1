@@ -1,4 +1,6 @@
 class Cell
+  attr_reader :position, :location, :piece
+
   def initialize(location, piece = nil)
     @location = location
     @position = get_pos(location)
@@ -7,6 +9,6 @@ class Cell
 
   def get_pos(location)
     arr = ('a'..'h').to_a
-    [arr[location[1]-1],location[0]].join('')
+    [arr[location[1] - 1], location[0]].join('')
   end
 end

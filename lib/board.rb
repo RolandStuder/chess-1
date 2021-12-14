@@ -17,8 +17,16 @@ class Board
 
     fen_to_board(refined_notation)
   end
+
+  def refine_grid
+    refined_grid = []
+    @grid.each do |x|
+      refined_grid << (x.piece.nil? ? x.location : x.location + [x.piece.color[0] + x.piece.class.to_s.downcase])
+    end
+    refined_grid
+  end
 end
 
-board = Board.new
-board.create_new_board
-p board.grid
+# board = Board.new
+# board.create_new_board
+# p board.refine_grid

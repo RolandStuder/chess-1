@@ -1,11 +1,15 @@
+require_relative 'board'
+require_relative 'display'
+
 class Game
+  include Display
   def initialize
     @player1 = nil
     @player2 = nil
-    @board = nil
+    @board = Board.new
     @id = nil
   end
-
+=begin
   def play
     welcome
     if new_game?
@@ -29,4 +33,14 @@ class Game
     end
     update_id
   end
+=end
+
+def disp
+  @board.create_new_board
+  grid = @board.refine_grid
+  display_grid(grid)
 end
+
+end
+
+Game.new.disp

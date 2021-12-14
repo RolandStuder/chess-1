@@ -114,4 +114,17 @@ RSpec.describe Board do
       expect { board.fen_to_board(Array.new(64, '')) }.to change { board.grid.size }.by(64)
     end
   end
+
+  describe '#refine_grid' do
+    subject(:my_grid) { described_class.new }
+    before do
+      my_grid.create_new_board
+      my_grid.instance_variable_set('@grid', my_grid.grid[0..1] + my_grid.grid[16..16] + my_grid.grid[-1..-1])
+    end
+
+    it 'Returns a refined grid' do
+      expected = [[8, 1, 'brook'], [8, 2, 'bknight'], [6, 1], [1, 8, 'wrook']]
+      expect(my_grid.refine_grid).to eql(expected)
+    end
+  end
 end

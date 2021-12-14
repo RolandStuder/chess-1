@@ -3,7 +3,7 @@ require_relative '../lib/pieces'
 RSpec.describe Knight do
   describe '#next_moves' do
     context 'Outputs correct moves' do
-      subject(:knight) { described_class.new('', '') }
+      subject(:knight) { described_class.new('') }
       it 'For location 2,1' do
         cur_location = [2, 1]
         outcome = [[1, 3], [3, 3], [4, 2]]
@@ -16,7 +16,7 @@ end
 RSpec.describe Rook do
   describe '#next_moves' do
     context 'It returns all the legal moves' do
-      subject(:rook) { described_class.new('', '') }
+      subject(:rook) { described_class.new('') }
       before do
         rook.make_test_board
         rook.test_board[rook.test_board.index([2, 4])] = 'pawn'
@@ -35,7 +35,7 @@ RSpec.describe Rook do
 
   describe '#set_valid' do
     context 'It returns the valid moves only' do
-      subject(:rook) { described_class.new('', '') }
+      subject(:rook) { described_class.new('') }
       it 'Keeps within range' do
         board = [[1, 1], [2, 1], [3, 1]]
         start = [3, 1]
@@ -56,7 +56,7 @@ end
 RSpec.describe Bishop do
   describe '#next_moves' do
     context 'It returns all the legal moves' do
-      subject(:bishop) { described_class.new('', '') }
+      subject(:bishop) { described_class.new('') }
       before do
         bishop.make_test_board
         bishop.test_board[bishop.test_board.index([6, 6])] = 'pawn'
@@ -74,7 +74,7 @@ RSpec.describe Bishop do
 
   describe '#set_valid' do
     context 'It returns the valid moves only' do
-      subject(:bishop) { described_class.new('', '') }
+      subject(:bishop) { described_class.new('') }
       it 'Keeps within range' do
         board = [[1, 1], [2, 2], [3, 3]]
         start = [3, 3]
@@ -95,7 +95,7 @@ end
 RSpec.describe Queen do
   describe '#next_moves' do
     context 'it outputs all legal moves' do
-      subject(:queen) { described_class.new('', '') }
+      subject(:queen) { described_class.new('') }
       before do
         queen.make_test_board
 
@@ -121,7 +121,7 @@ end
 RSpec.describe Pawn do
   describe '#next_moves' do
     context 'it outputs the corrent moves' do
-      subject(:pawn) { described_class.new('', '') }
+      subject(:pawn) { described_class.new('') }
       before do
         pawn.make_test_board
       end
@@ -144,18 +144,18 @@ RSpec.describe Pawn do
   end
 end
 
-RSpec.describe King do 
-  describe '#next_moves' do 
-    subject(:king) {described_class.new("","")}
-    before do 
+RSpec.describe King do
+  describe '#next_moves' do
+    subject(:king) { described_class.new('') }
+    before do
       king.make_test_board
     end
 
-    it 'outputs the correct moves' do 
+    it 'outputs the correct moves' do
       board = king.test_board
-      position = [1,1]
-      expected = [[2,1],[2,2],[1,2]].sort
-      expect(king.next_moves(position,board).sort).to eql(expected)
+      position = [1, 1]
+      expected = [[2, 1], [2, 2], [1, 2]].sort
+      expect(king.next_moves(position, board).sort).to eql(expected)
     end
   end
 end

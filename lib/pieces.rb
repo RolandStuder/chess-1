@@ -3,10 +3,8 @@ require_relative 'helper'
 class Pieces
   attr_accessor :test_board
 
-  def initialize(_location, _color)
-    @location = nil
-    @nextMoves = []
-    @color = nil
+  def initialize(color = nil)
+    @color = color
     @starting = true
     @test_board = []
   end
@@ -69,7 +67,7 @@ class King < Pieces
   end
 
   MOVES = [[1, 1], [-1, 1], [-1, -1], [1, -1], [-1, 0], [1, 0], [0, 1], [0, -1]]
-  def set_valid(start,board,increment)
+  def set_valid(start, board, increment)
     set = super
     [set[0]]
   end

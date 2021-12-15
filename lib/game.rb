@@ -1,46 +1,42 @@
-require_relative 'board'
 require_relative 'display'
+require_relative 'driver'
 
 class Game
   include Display
   def initialize
     @player1 = nil
     @player2 = nil
-    @board = Board.new
+    @driver = Driver.new
     @id = nil
   end
-=begin
-  def play
-    welcome
-    if new_game?
-      create_board
-      populate_board
-      create_players
-    else
-      restore_game
-    end
 
-    display_board
-    get_input
-    update_board
-    if checkmate?
-      decide_winner
-      announce_winner
-      break
-    elsif draw?
-      announce_draw
-      break
-    end
-    update_id
+  def get_grid
+    @driver.send_grid
   end
-=end
 
-def disp
-  @board.create_new_board
-  grid = @board.refine_grid
-  display_grid(grid)
+  def make_board
+    @driver.init_board
+  end
+
+  def send_input
+    input1 = get_input
+    input2 = get_input
+    @driver.receive_input(input1, input2)
+  end
+
+  def display
+    grid = get_grid
+    display_grid(grid)
+  end
+
+  def play
+    make_board
+    display
+    3.times do
+      send_input
+      display
+    end
+  end
 end
 
-end
-
-Game.new.disp
+Game.new.play

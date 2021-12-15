@@ -127,4 +127,40 @@ RSpec.describe Board do
       expect(my_grid.refine_grid).to eql(expected)
     end
   end
+
+  describe '#find_cell' do
+    subject(:cell) { described_class.new }
+    before do
+      cell.create_new_board
+    end
+
+    it 'Returns the corrext index with location' do
+      location = cell.grid[5].location
+      expect(cell.find_cell(location)).to eql(5)
+    end
+
+    it 'returns the correct index with position' do
+      position = cell.grid[5].position
+      expect(cell.find_cell(position)).to eql(5)
+    end
+  end
+
+  describe '#mark_grid' do
+    context 'It updates the grid correctly' do
+      subject(:cell) { described_class.new }
+      before do
+        cell.create_new_board
+      end
+
+      it 'When the black rook captures the white one' do
+        cell1 = [8, 1]
+        cell2 = [1, 1]
+        piece = cell.grid[0].piece
+        expect { cell.mark_grid(cell1, cell2) }.to change { cell.grid[56].piece }.to(piece)
+                                                                                 .and change {
+                                                                                        cell.grid[0].piece
+                                                                                      }.to(nil)
+      end
+    end
+  end
 end

@@ -1,5 +1,6 @@
 class Cell
-  attr_reader :position, :location, :piece
+  attr_reader :position, :location
+  attr_accessor :piece
 
   def initialize(location, piece = nil)
     @location = location

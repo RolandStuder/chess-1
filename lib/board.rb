@@ -25,8 +25,21 @@ class Board
     end
     refined_grid
   end
+
+  def mark_grid(cell1, cell2)
+    pre_cell = find_cell(cell1)
+    nex_cell = find_cell(cell2)
+    piece = @grid[pre_cell].piece
+    @grid[pre_cell].piece = nil
+    @grid[nex_cell].piece = piece
+  end
+
+  def find_cell(cell)
+    node = @grid.find { |x| x.location == cell || x.position == cell }
+    @grid.index(node)
+  end
 end
 
 # board = Board.new
 # board.create_new_board
-# p board.refine_grid
+# p board.find_cell([1,1])

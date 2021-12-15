@@ -52,12 +52,13 @@ class Pawn < Pieces
   def moved?
     @starting = false
   end
-  MOVES = [[1, 0]]
+  MOVES = [[1, 0], [-1, 0]]
+
   def set_valid(start, board, increment)
     set = super
-    return [set[0]] if @starting == false && set.size > 1
+    return [set[0], set[1]] if @starting == true && set.size > 1
 
-    [set[0], set[1]]
+    [set[0]]
   end
 end
 

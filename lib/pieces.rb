@@ -20,11 +20,11 @@ class Pieces
 end
 
 class Knight < Pieces
+  include Helper
   MOVES = [[1, 2], [2, 1], [-1, 2], [-2, 1], [2, -1], [1, -2], [-1, -2], [-2, -1]]
-  def next_moves(point)
-    set = MOVES.map { |x| [x[0] + point[0], x[1] + point[1]] }
-    set.keep_if { |x| x[0].between?(1, 8) && x[1].between?(1, 8) }
-    set
+  def set_valid(start, board, increment)
+    set = super
+    [set[0]]
   end
 end
 

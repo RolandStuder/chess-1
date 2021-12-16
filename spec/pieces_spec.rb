@@ -4,10 +4,11 @@ RSpec.describe Knight do
   describe '#next_moves' do
     context 'Outputs correct moves' do
       subject(:knight) { described_class.new('') }
-      xit 'For location 2,1' do
+      it 'For location 2,1' do
+        knight.make_test_board
         cur_location = [2, 1]
         outcome = [[1, 3], [3, 3], [4, 2]]
-        expect(knight.next_moves(cur_location).sort).to eql(outcome.sort)
+        expect(knight.next_moves(cur_location,knight.test_board).sort).to eql(outcome.sort)
       end
     end
   end
@@ -24,7 +25,7 @@ RSpec.describe Rook do
         rook.test_board[rook.test_board.index([7, 4])] << 'pawn'
       end
       it 'When the board is populated' do
-        p board = rook.test_board
+        board = rook.test_board
         position = [4, 4]
         expected = [[4, 3], [4, 2], [4, 1], [3, 4], [4, 5], [4, 6], [4, 7], [5, 4], [6, 4], [7, 4]].sort
         actual = rook.next_moves(position, board).sort

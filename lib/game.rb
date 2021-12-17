@@ -23,9 +23,7 @@ class Game
       input1 = get_input
     end
     input2 = get_input
-    until @driver.move_legal?(input1,input2)
-      input2 = get_input
-    end
+    input2 = get_input until @driver.move_legal?(input1, input2)
     @driver.receive_input(input1, input2)
   end
 
@@ -47,12 +45,12 @@ class Game
 
   def make_players
     input = bot_pvp?
-    p1 = get_names("Player 1")
-    if input == '1' 
-       p2 = get_names("Player 2")
-       @driver.set_players(p1,p2) 
+    p1 = get_names('Player 1')
+    if input == '1'
+      p2 = get_names('Player 2')
+      @driver.set_players(p1, p2)
     else
-       @driver.set_players(p1)
+      @driver.set_players(p1)
     end
   end
 end

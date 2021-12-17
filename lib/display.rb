@@ -49,8 +49,8 @@ module Display
   end
 
   def bot_pvp?
-    puts "Do you want to play with computer or another player?"
-    puts "Press 1 for 2 players"
+    puts 'Do you want to play with computer or another player?'
+    puts 'Press 1 for 2 players'
     puts 'Press 2 for computer game'
     gets.chomp
   end
@@ -59,5 +59,4 @@ module Display
     puts "Please enter the name for #{player}"
     gets.chomp
   end
-
 end

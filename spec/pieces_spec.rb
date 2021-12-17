@@ -3,12 +3,13 @@ require_relative '../lib/pieces'
 RSpec.describe Knight do
   describe '#next_moves' do
     context 'Outputs correct moves' do
-      subject(:knight) { described_class.new('') }
+      subject(:knight) { described_class.new('black') }
       it 'For location 2,1' do
         knight.make_test_board
+        knight.test_board[knight.test_board.index([1, 3])] << 'bpawn'
         cur_location = [2, 1]
-        outcome = [[1, 3], [3, 3], [4, 2]]
-        expect(knight.next_moves(cur_location,knight.test_board).sort).to eql(outcome.sort)
+        outcome = [[[3, 3]], [[4, 2]]]
+        expect(knight.next_moves(cur_location, knight.test_board).sort).to eql(outcome.sort)
       end
     end
   end
@@ -27,7 +28,7 @@ RSpec.describe Rook do
       it 'When the board is populated' do
         board = rook.test_board
         position = [4, 4]
-        expected = [[4, 3], [4, 2], [4, 1], [3, 4], [4, 5], [4, 6], [4, 7], [5, 4], [6, 4], [7, 4]].sort
+        expected = [[[4, 3], [4, 2], [4, 1]], [[3, 4]], [[4, 5], [4, 6], [4, 7]], [[5, 4], [6, 4], [7, 4]]].sort
         actual = rook.next_moves(position, board).sort
         expect(actual).to eql(expected)
       end
@@ -66,7 +67,7 @@ RSpec.describe Bishop do
       it 'When the board is populated' do
         board = bishop.test_board
         position = [4, 4]
-        expected = [[3, 3], [2, 2], [1, 1], [3, 5], [2, 6], [5, 3], [6, 2], [7, 1], [5, 5]].sort
+        expected = [[[3, 3], [2, 2], [1, 1]], [[3, 5], [2, 6]], [[5, 3], [6, 2], [7, 1]], [[5, 5]]].sort
         actual = bishop.next_moves(position, board).sort
         expect(actual).to eql(expected)
       end
@@ -110,8 +111,8 @@ RSpec.describe Queen do
       it 'When the board is populated' do
         board = queen.test_board
         position = [4, 4]
-        expected = [[3, 3], [2, 2], [1, 1], [3, 5], [2, 6], [5, 3], [6, 2], [7, 1], [5, 5], [6, 6],
-                    [4, 3], [4, 2], [4, 1], [3, 4], [2, 4], [4, 5], [4, 6], [4, 7], [5, 4], [6, 4]].sort
+        expected = [[[3, 3], [2, 2], [1, 1]], [[3, 5], [2, 6]], [[5, 3], [6, 2], [7, 1]], [[5, 5], [6, 6]],
+                    [[4, 3], [4, 2], [4, 1]], [[3, 4], [2, 4]], [[4, 5], [4, 6], [4, 7]], [[5, 4], [6, 4]]].sort
         actual = queen.next_moves(position, board).sort
         expect(actual).to eql(expected)
       end
@@ -130,7 +131,7 @@ RSpec.describe Pawn do
       it 'When the pawn has not moved' do
         board = pawn.test_board
         position = [1, 1]
-        expected = [[2, 1], [3, 1]]
+        expected = [[[2, 1], [3, 1]], [[2, 2]]]
         expect(pawn.next_moves(position, board).sort).to eql(expected.sort)
       end
 
@@ -138,9 +139,24 @@ RSpec.describe Pawn do
         pawn.instance_variable_set('@starting', false)
         board = pawn.test_board
         position = [1, 1]
-        expected = [[2, 1]]
+        expected = [[[2, 1]], [[2, 2]]]
         expect(pawn.next_moves(position, board).sort).to eql(expected.sort)
       end
+    end
+  end
+
+  describe '#attack_able?' do
+    subject(:pawn) { described_class.new('black') }
+    it 'refined the valid moves' do
+      board = [[1, 2, 'wpawn'], [3, 4, 'bpawn'], [4, 3, 'wpawn'], [8, 8, 'bpawn']]
+      moves = [[1, 2], [3, 4], [4, 3], [8, 8]]
+      expect(pawn.attack_able?(board, moves)).to eql([[1, 2], [4, 3]])
+    end
+
+    it 'refined the valid moves' do
+      board = [[1, 2, 'bpawn'], [3, 4, 'bpawn']]
+      moves = [[1, 2], [3, 4]]
+      expect(pawn.attack_able?(board, moves)).to eql([])
     end
   end
 end
@@ -155,7 +171,7 @@ RSpec.describe King do
     it 'outputs the correct moves' do
       board = king.test_board
       position = [1, 1]
-      expected = [[2, 1], [2, 2], [1, 2]].sort
+      expected = [[[2, 1]], [[2, 2]], [[1, 2]]].sort
       expect(king.next_moves(position, board).sort).to eql(expected)
     end
   end

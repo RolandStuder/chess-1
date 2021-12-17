@@ -7,11 +7,13 @@ require 'pry-byebug'
 class Driver
   include Ruleset
   attr_reader :board
+
   def initialize
     @board = Board.new
     @player1 = nil
     @player2 = nil
     @cur_player = nil
+    @dummy_board = nil
   end
 
   def init_board
@@ -28,33 +30,38 @@ class Driver
 
   def selection_valid?(tile)
     node = @board.grid[@board.find_cell(tile)]
-     not_empty?(node) &&
+    not_empty?(node) &&
       belongs_to?(node) &&
       has_moves?(node)
   end
 
-  def move_legal?(start,dest)
+  def move_legal?(start, dest)
     node1 = @board[@board.find_cell(start)]
     node2 = @board[@board.find_cell(dest)]
-    can_move?(node1,node2)
+    can_move?(node1, node2)
   end
 
-  def set_players(p1,p2=nil)
-    @player1 = Human.new(p1,'white')
-    if p2 
-      @player2 = Human.new(p1,'black')
+  def set_players(p1, p2 = nil)
+    @player1 = Human.new(p1, 'white')
+    if p2
+      @player2 = Human.new(p1, 'black')
     else
-      @player1 = Bot.new('Computer','black')
+      @player1 = Bot.new('Computer', 'black')
     end
     @cur_player = @player1
   end
-  
+
   def update_turn
     @cur_player = @cur_player == @player1 ? @player2 : @player1
+  end
+
+  def update_dummy
+    @dummy_board = @board.grid.dup
   end
 end
 
 driver = Driver.new
 driver.init_board
-p driver.get_possible_moves('white',driver.board.grid,driver.send_grid)
+driver.set_players("","")
+p driver.find_king(driver.board.grid)
 # p driver.selection_valid?('a1')

@@ -3,11 +3,9 @@ module Helper
   def next_moves(location, board)
     legal_moves = []
     self.class::MOVES.each do |x|
-      next if check_pawn(x)
-
       set = set_valid(location, board, x)
       set.pop unless set[-1].all? { |y| y.between?(1, 8) } && attack_able?(set[-1], board)
-      set.each { |y| legal_moves << y }
+      legal_moves << set.compact unless set.empty?
     end
     legal_moves.compact
   end
@@ -31,11 +29,5 @@ module Helper
 
       x[2][0] != @color[0] ? (return true) : (return false)
     end
-    false
-  end
-
-  def check_pawn(x)
-    (is_a?(Pawn) && @color == 'black' && x == [1, 0]) ||
-      (is_a?(Pawn) && @color == 'white' && x == [-1, 0])
   end
 end

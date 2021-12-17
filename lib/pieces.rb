@@ -52,13 +52,32 @@ class Pawn < Pieces
   def moved?
     @starting = false
   end
-  MOVES = [[1, 0], [-1, 0]]
+  MOVES = { 'black' => [-1, 0], 'white' => [1, 0] }.freeze
+  ATTACKS = { 'white' => [[1, -1], [1, 1]], 'black' => [[-1, -1], [-1, 1]] }.freeze
+
+  def next_moves(location, board)
+    moves = set_valid(location, board, MOVES[@color])
+    attacks = []
+    ATTACKS[@color].each { |x| attacks << set_valid(location, board, x)[0] }
+    moves.keep_if { |x| x.all? { |y| y.between?(1, 8) } }
+    attacks.keep_if { |x| x.all? { |y| y.between?(1, 8) } }
+    [moves.compact, attacks.compact]
+  end
 
   def set_valid(start, board, increment)
     set = super
     return [set[0], set[1]] if @starting == true && set.size > 1
 
     [set[0]]
+  end
+
+  def attack_able?(board, moves)
+    valid = []
+    moves.each do |x|
+      x << @color[0] + 'pawn'
+      (valid << x[0..1]) unless board.include?(x)
+    end
+    valid
   end
 end
 

@@ -37,7 +37,7 @@ RSpec.describe Driver do
     let(:tile_rook_black) { board.grid[0] }
     let(:tile_pawn_white) { board.grid[48] }
     let(:tile_empty) { board.grid[18] }
-    let(:tile_empty_movable) {board.grid[40]}
+    let(:tile_empty_movable) { board.grid[40] }
 
     describe '#not_empty?' do
       subject(:driver) { described_class.new }
@@ -53,7 +53,7 @@ RSpec.describe Driver do
     describe '#belongs_to?' do
       subject(:driver) { described_class.new }
       it 'Returns true when the color matches' do
-        driver.instance_variable_set('@cur_player',Player.new('','white'))
+        driver.instance_variable_set('@cur_player', Player.new('', 'white'))
         expect(driver.belongs_to?(tile_pawn_white)).to be_truthy
       end
     end
@@ -66,13 +66,12 @@ RSpec.describe Driver do
       end
     end
 
-    describe '#can_move?' do 
-        subject(:driver) {described_class.new}
-        it 'returns true if the piece can move' do 
-            driver.init_board
-            expect(driver.can_move?(tile_pawn_white,tile_empty_movable)).to be_truthy
-        end
+    describe '#can_move?' do
+      subject(:driver) { described_class.new }
+      it 'returns true if the piece can move' do
+        driver.init_board
+        expect(driver.can_move?(tile_pawn_white, tile_empty_movable)).to be_truthy
+      end
     end
-
   end
 end

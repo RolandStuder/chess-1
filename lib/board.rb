@@ -38,6 +38,17 @@ class Board
     node = @grid.find { |x| x.location == cell || x.position == cell }
     @grid.index(node)
   end
+
+  def restore_board(fen)
+    refined_notation = refine_notation(fen)
+    return 'Bad input' unless verify_notation(refined_notation)
+
+    fen_to_board(refined_notation)
+  end
+
+  def cloner(dummy)
+    @grid = dummy.map(&:clone)
+  end
 end
 
 # board = Board.new

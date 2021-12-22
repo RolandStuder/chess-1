@@ -56,12 +56,18 @@ class Driver
   end
 
   def update_dummy
-    @dummy_board = @board.grid.dup
+    @dummy_board = @board.grid.map(&:clone)
+  end
+
+  def clone_dummy
+    @board.cloner(@dummy_board)
   end
 end
 
 driver = Driver.new
-driver.init_board
-driver.set_players("","")
-p driver.find_king(driver.board.grid)
+driver.board.restore_board('8/8/8/3K4/2Q5/8/b7/8')
+driver.set_players('', '')
+moves = driver.board.grid[34].piece.next_moves([4, 3], driver.board.refine_grid)
+p driver.trim_piece_moves(moves,[4,3])
+#driver.trim_p_helper([4,4],moves[4])
 # p driver.selection_valid?('a1')

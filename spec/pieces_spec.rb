@@ -131,7 +131,7 @@ RSpec.describe Pawn do
       it 'When the pawn has not moved' do
         board = pawn.test_board
         position = [1, 1]
-        expected = [[[2, 1], [3, 1]], [[2, 2]]]
+        expected = [[[2, 1], [3, 1]], []]
         expect(pawn.next_moves(position, board).sort).to eql(expected.sort)
       end
 
@@ -139,24 +139,9 @@ RSpec.describe Pawn do
         pawn.instance_variable_set('@starting', false)
         board = pawn.test_board
         position = [1, 1]
-        expected = [[[2, 1]], [[2, 2]]]
+        expected = [[[2, 1]], []]
         expect(pawn.next_moves(position, board).sort).to eql(expected.sort)
       end
-    end
-  end
-
-  describe '#attack_able?' do
-    subject(:pawn) { described_class.new('black') }
-    it 'refined the valid moves' do
-      board = [[1, 2, 'wpawn'], [3, 4, 'bpawn'], [4, 3, 'wpawn'], [8, 8, 'bpawn']]
-      moves = [[1, 2], [3, 4], [4, 3], [8, 8]]
-      expect(pawn.attack_able?(board, moves)).to eql([[1, 2], [4, 3]])
-    end
-
-    it 'refined the valid moves' do
-      board = [[1, 2, 'bpawn'], [3, 4, 'bpawn']]
-      moves = [[1, 2], [3, 4]]
-      expect(pawn.attack_able?(board, moves)).to eql([])
     end
   end
 end

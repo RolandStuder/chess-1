@@ -11,31 +11,13 @@ module Ruleset
     grid = @board.refine_grid
     location = tile.location
     moves = tile.piece.next_moves(location, grid)
-    if tile.piece.is_a? Pawn
-      attacks = tile.piece.attack_able?(grid, moves[1]) unless moves[1].empty?
-      (moves[0] + attacks).compact.size.positive?
-    else
-      moves.reduce(&:+).delete_if(&:empty?).size.positive?
-    end
-  end
-
-  def can_move?(start, dest)
-    grid = @board.refine_grid
-    location = start.location
-    moves = start.piece.next_moves(location, grid)
-    if start.piece.is_a? Pawn
-      attacks = start.piece.attack_able?(grid, moves[1]) unless moves[1].empty?
-      moves = (moves[0] + attacks).compact
-    else
-      moves.reduce(&:+).delete_if(&:empty?).size.positive?
-    end
-    moves.include?(dest.location)
+    moves.reduce(&:+).delete_if(&:empty?).size.positive?
   end
 
   def in_check?
     all_moves = get_possible_moves(@cur_player.color, @board.grid, @board.refine_grid)
     tile = find_king
-    return false if all_moves.empty? 
+    return false if all_moves.empty?
 
     all_moves.include?(tile.location)
   end
@@ -52,7 +34,7 @@ module Ruleset
       next if cell.piece.nil? || cell.piece.color == color
 
       moves = cell.piece.next_moves(cell.location, board)
-      moves = [cell.piece.attack_able?(grid, moves[1]).compact] if cell.piece.is_a? Pawn
+      moves = cell.piece.all_moves(cell.location, board)[1] if cell.piece.is_a? Pawn
       move_set << moves
     end
     return [] if move_set.empty?
@@ -77,7 +59,7 @@ module Ruleset
   def trim_piece_moves(moveset, location)
     refined = []
     moveset.each do |moves|
-      #binding.pry
+      # binding.pry
       refined << moves if trim_p_helper(location, moves)
       clone_dummy
     end
@@ -95,7 +77,25 @@ module Ruleset
     true
   end
 
-  def trim_in_check(moveset)
-    
+  def trim_in_check(moveset, location)
+    update_dummy
+    moves = moveset.flatten(1)
+    refined = []
+    moves.each do |move|
+      @board.mark_grid(location, move)
+      refined << move unless in_check?
+      clone_dummy
+    end
+    refined
+  end
+
+  def get_moves(tile)
+    location = tile.location
+    moves = tile.piece.next_moves(location, @board.refine_grid)
+    if tile.piece.is_a? King
+       trim_king_moves(moves)
+    else
+       trim_piece_moves(moves, location)
+    end
   end
 end

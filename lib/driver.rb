@@ -65,9 +65,8 @@ class Driver
 end
 
 driver = Driver.new
-driver.board.restore_board('8/8/8/3K4/2Q5/8/b7/8')
+driver.board.restore_board('K7/8/8/8/8/8/2b1P3/3R4')
 driver.set_players('', '')
-moves = driver.board.grid[34].piece.next_moves([4, 3], driver.board.refine_grid)
-p driver.trim_piece_moves(moves,[4,3])
-#driver.trim_p_helper([4,4],moves[4])
-# p driver.selection_valid?('a1')
+p driver.get_moves(driver.board.grid[59]).reduce(&:+)
+
+# p driver.selection_valid?('a1')e-21xx1

@@ -65,13 +65,5 @@ RSpec.describe Driver do
         expect(driver.has_moves?(tile_pawn_white)).to be_truthy
       end
     end
-
-    describe '#can_move?' do
-      subject(:driver) { described_class.new }
-      it 'returns true if the piece can move' do
-        driver.init_board
-        expect(driver.can_move?(tile_pawn_white, tile_empty_movable)).to be_truthy
-      end
-    end
   end
 end

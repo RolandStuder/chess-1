@@ -49,6 +49,11 @@ class Board
   def cloner(dummy)
     @grid = dummy.map(&:clone)
   end
+
+  def update_moved(tile)
+     node = @grid[find_cell(tile)]
+     node.piece.has_moved
+  end
 end
 
 # board = Board.new

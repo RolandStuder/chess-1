@@ -21,6 +21,7 @@ class Driver
   end
 
   def receive_input(input1, input2)
+    @board.update_moved(input1)
     @board.mark_grid(input1, input2)
   end
 
@@ -29,6 +30,8 @@ class Driver
   end
 
   def selection_valid?(tile)
+    return false unless valid?(tile)
+
     node = @board.grid[@board.find_cell(tile)]
     not_empty?(node) &&
       belongs_to?(node) &&
@@ -36,18 +39,20 @@ class Driver
   end
 
   def move_legal?(start, dest)
-    node1 = @board[@board.find_cell(start)]
-    node2 = @board[@board.find_cell(dest)]
-    can_move?(node1, node2)
+    return false unless valid?(dest)
+
+    start = @board.grid[@board.find_cell(start)]
+    dest = @board.grid[@board.find_cell(dest)].location
+    can_move?(dest, start)
   end
 
   def set_players(p1, p2 = nil)
     @player1 = Human.new(p1, 'white')
-    if p2
-      @player2 = Human.new(p1, 'black')
-    else
-      @player1 = Bot.new('Computer', 'black')
-    end
+    @player2 = if p2
+                 Human.new(p2, 'black')
+               else
+                 Bot.new('Computer', 'black')
+               end
     @cur_player = @player1
   end
 
@@ -62,11 +67,24 @@ class Driver
   def clone_dummy
     @board.cloner(@dummy_board)
   end
-end
 
-driver = Driver.new
-driver.board.restore_board('K7/8/8/8/8/8/2b1P3/3R4')
-driver.set_players('', '')
-p driver.get_moves(driver.board.grid[59]).reduce(&:+)
+  def select_piece
+    input = @cur_player.piece_select
+    until selection_valid?(input)
+      puts 'The selected tile does not exist or is invalid or has no legal moves' if @cur_player.is_a? Human
+      input = @cur_player.piece_select
+    end
+    input
+  end
+
+  def select_move(input)
+    move = @cur_player.move_select
+    until move_legal?(input , move)
+      puts 'This is not a legal move! Please try again!' if @cur_player.is_a? Human
+      move = @cur_player.move_select
+    end
+    move
+  end
+end
 
 # p driver.selection_valid?('a1')e-21xx1

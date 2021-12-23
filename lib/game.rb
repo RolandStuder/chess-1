@@ -15,16 +15,11 @@ class Game
   def make_board
     @driver.init_board
   end
-
-  def send_input
-    input1 = get_input
-    until @driver.selection_valid?(input1)
-      puts 'wrong lol'
-      input1 = get_input
-    end
-    input2 = get_input
-    input2 = get_input until @driver.move_legal?(input1, input2)
-    @driver.receive_input(input1, input2)
+  
+  def call_inputs
+    input1 = @driver.select_piece
+    input2 = @driver.select_move(input1)
+    [input1, input2]
   end
 
   def display
@@ -32,12 +27,17 @@ class Game
     display_grid(grid)
   end
 
+  def send_inputs
+    inputs = call_inputs
+    @driver.receive_input(inputs[0],inputs[1])
+  end
+
   def play
     make_board
     make_players
     display
-    3.times do
-      send_input
+    loop do
+      send_inputs
       display
       @driver.update_turn
     end

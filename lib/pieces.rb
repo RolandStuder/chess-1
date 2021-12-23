@@ -90,7 +90,7 @@ end
 class King < Pieces
   include Helper
 
-  MOVES = [[1, 1], [-1, 1], [-1, -1], [1, -1], [-1, 0], [1, 0], [0, 1], [0, -1]]
+  MOVES = [[1, 1], [-1, 1], [-1, -1], [1, -1], [-1, 0], [1, 0], [0, 1], [0, -1]].freeze
   def set_valid(start, board, increment)
     set = super
     [set[0]]

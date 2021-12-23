@@ -1,4 +1,10 @@
 module Ruleset
+  def valid?(selection)
+    selection.size == 2 &&
+      selection[0].between?('a', 'h') &&
+      selection[1].between?('1', '8')
+  end
+
   def not_empty?(tile)
     !tile.piece.nil?
   end
@@ -8,10 +14,15 @@ module Ruleset
   end
 
   def has_moves?(tile)
-    grid = @board.refine_grid
-    location = tile.location
-    moves = tile.piece.next_moves(location, grid)
-    moves.reduce(&:+).delete_if(&:empty?).size.positive?
+    moves = get_moves(tile)
+    return false if moves.empty?
+
+    moves.reduce(&:+).size.positive?
+  end
+
+  def can_move?(location, tile)
+    moves = get_moves(tile)
+    moves.reduce(&:+).include?(location)
   end
 
   def in_check?
@@ -34,7 +45,7 @@ module Ruleset
       next if cell.piece.nil? || cell.piece.color == color
 
       moves = cell.piece.next_moves(cell.location, board)
-      moves = cell.piece.all_moves(cell.location, board)[1] if cell.piece.is_a? Pawn
+      moves = [cell.piece.all_moves(cell.location, board)[1]] if cell.piece.is_a? Pawn
       move_set << moves
     end
     return [] if move_set.empty?
@@ -50,29 +61,27 @@ module Ruleset
     moves = moveset.reduce(&:+)
     moves.each do |move|
       @board.mark_grid(current_loc, move)
-      refined << move unless in_check?
+      refined << [move] unless in_check?
       clone_dummy
     end
     refined
   end
 
   def trim_piece_moves(moveset, location)
+    update_dummy
     refined = []
     moveset.each do |moves|
-      # binding.pry
-      refined << moves if trim_p_helper(location, moves)
       clone_dummy
+      refined << moves if trim_p_helper(location, moves)
     end
+    clone_dummy
     refined
   end
 
   def trim_p_helper(location, moves)
-    update_dummy
     moves.each do |move|
       @board.mark_grid(location, move)
       return false if in_check?
-
-      clone_dummy
     end
     true
   end
@@ -93,9 +102,11 @@ module Ruleset
     location = tile.location
     moves = tile.piece.next_moves(location, @board.refine_grid)
     if tile.piece.is_a? King
-       trim_king_moves(moves)
+      trim_king_moves(moves)
+    elsif in_check?
+      [trim_in_check(moves, location)]
     else
-       trim_piece_moves(moves, location)
+      trim_piece_moves(moves, location)
     end
   end
 end

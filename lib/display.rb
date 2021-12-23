@@ -13,14 +13,17 @@ module Display
     bknight: " \u2658 ",
     bpawn: " \u2659 "
   }.freeze
-
+  INDENT = '  a  b  c  d  e  f  g  h'.freeze
   def display_grid(grid)
+    puts INDENT
+    print '8'
     grid.each do |x|
       tile = get_tile(x)
       tile = put_piece(x, tile) unless x.size == 2
       print tile.join('')
-      print "\n" if line_break?(x)
+      print "#{x[0]}\n#{x[0]-1}" if line_break?(x)
     end
+    puts "1\n#{INDENT}"
   end
 
   def get_tile(location)
@@ -40,6 +43,8 @@ module Display
   end
 
   def line_break?(location)
+    return false if location[0..1] == [1,8]
+
     location[1] == 8
   end
 

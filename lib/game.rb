@@ -12,6 +12,13 @@ class Game
     @driver.send_grid
   end
 
+  def upgrade_possible?
+    return unless @driver.can_upgrade?
+
+    input = disp_upgrade
+    @driver.upgrade(input)
+  end
+
   def make_board
     @driver.init_board
   end
@@ -33,13 +40,23 @@ class Game
   end
 
   def play
-    @driver.board.restore_board('r3k2r/8/8/8/8/4P3/8/R3K2R')
+    @driver.init_board
     make_players
     display
     loop do
+      upgrade_possible?
+      @driver.update_turn
+      if @driver.win?
+        display
+        disp_winner(@driver.winner)
+        break
+      elsif @driver.draw?
+        display
+        disp_draw
+        break
+      end
       send_inputs
       display
-      @driver.update_turn
     end
   end
 

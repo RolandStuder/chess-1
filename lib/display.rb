@@ -15,6 +15,7 @@ module Display
   }.freeze
   INDENT = '  a  b  c  d  e  f  g  h'.freeze
   def display_grid(grid)
+    system('clear')
     puts INDENT
     print '8'
     grid.each do |x|
@@ -37,7 +38,7 @@ module Display
   end
 
   def put_piece(lp, tile)
-    tile.each { |x| x.strip! }
+    tile.each(&:strip!)
     piece = PCS[lp[2].to_sym]
     tile.insert(1, piece)
   end
@@ -46,11 +47,6 @@ module Display
     return false if location[0..1] == [1, 8]
 
     location[1] == 8
-  end
-
-  def get_input
-    puts 'enter your choice lmao'
-    gets.chomp
   end
 
   def bot_pvp?
@@ -63,5 +59,22 @@ module Display
   def get_names(player)
     puts "Please enter the name for #{player}"
     gets.chomp
+  end
+
+  def disp_upgrade
+    puts 'Congrats, your pawn can upgrade'
+    puts 'Enter q for Queen'
+    puts 'Enter r for Rook'
+    puts 'Enter n for Knight'
+    puts 'Enter b for Bishop'
+    gets.chomp
+  end
+
+  def disp_winner(winner)
+    puts "Congrats! #{winner} has won the game!"
+  end
+
+  def disp_draw
+    puts 'This game has ended in a draw'
   end
 end

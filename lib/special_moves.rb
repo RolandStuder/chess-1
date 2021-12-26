@@ -3,6 +3,8 @@ require_relative 'ruleset'
 module Smoves
   include Ruleset
 
+  # Castling
+
   ROOK_TILES = { 1 => [0, 1], 8 => [0, -1] }.freeze
   KING_TILES = { 8 => [0, 1], 1 => [0, -1] }.freeze
 
@@ -73,5 +75,46 @@ module Smoves
     moveset = [find_king.location]
     2.times { moveset << [moveset[-1][0] + increment[0], moveset[-1][1] + increment[1]] }
     moveset[1..-1].map { |x| [x] }
+  end
+
+  # en Passant
+  def adjacent_pawns(tile)
+    pawns = []
+    ind = @board.find_cell(tile.location)
+    [1, -1].each do |x|
+      pawns << @board.grid[ind + x]
+    end
+    pawns.compact.select do |x|
+      x.location[0] == tile.location[0] &&
+        x.piece.is_a?(Pawn) && x.piece.color != @cur_player.color
+    end
+  end
+
+  def double_move?(pawns)
+    refined = []
+    pawns.each do |pawn|
+      position = pawn.position
+      refined << pawn if position == @last_move[3..4] &&
+                         %w[2 7].include?(@last_move[1]) &&
+                         position[1].between?('4', '5')
+    end
+    refined
+  end
+
+  def allow_en_passant(tile)
+    pawns = adjacent_pawns(tile)
+    return [] if pawns.empty?
+
+    refined = double_move?(pawns)
+    return [] if refined.empty?
+
+    get_attacks(refined)
+  end
+
+  def get_attacks(pawns)
+    pawns.map do |pawn|
+      location = pawn.location
+      @cur_player.color == 'white' ? [location[0] + 1, location[1]] : [location[0] - 1, location[1]]
+    end
   end
 end

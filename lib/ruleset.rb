@@ -51,7 +51,7 @@ module Ruleset
     update_dummy
     refined = []
     current_loc = find_king.location
-    moves = moveset.reduce(&:+)
+    moves = moveset.empty? ? [] : moveset&.reduce(&:+)
     moves.each do |move|
       @board.mark_grid(current_loc, move)
       refined << [move] unless in_check?
@@ -96,12 +96,41 @@ module Ruleset
     moves = tile.call_moves(@board.refine_grid)
     if tile.piece.is_a? King
       trim_king_moves(moves) + allow_castle('king')
-    elsif tile.piece.is_a?(Rook) && !in_check?
-      trim_piece_moves(moves, location) + allow_castle(location)
     elsif in_check?
       [trim_in_check(moves, location)]
+    elsif tile.piece.is_a?(Rook)
+      trim_piece_moves(moves, location) + allow_castle(location)
+    elsif tile.piece.is_a?(Pawn)
+      moves[1] += allow_en_passant(tile)
+      trim_piece_moves(moves, location)
     else
       trim_piece_moves(moves, location)
     end
+  end
+
+  def win?
+    return false unless in_check?
+    return false unless get_moves(find_king).empty?
+
+    all_pcs.map { |pc| get_moves(pc) }.flatten.empty?
+  end
+
+  def all_pcs
+    @board.grid.select { |x| !x.piece.nil? && x.color == @cur_player.color }
+  end
+
+  def draw?
+    kings_left || stalemate
+  end
+
+  def kings_left
+    @board.grid.reject { |x| x.piece.nil? }.size < 3
+  end
+
+  def stalemate
+    return false if in_check?
+    return false unless get_moves(find_king).empty?
+
+    all_pcs.map { |pc| get_moves(pc) }.flatten.empty?
   end
 end

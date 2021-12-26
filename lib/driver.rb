@@ -17,6 +17,7 @@ class Driver
     @player2 = nil
     @cur_player = nil
     @dummy_board = nil
+    @last_move = 'd7 d5'
   end
 
   def init_board
@@ -24,6 +25,7 @@ class Driver
   end
 
   def receive_input(input1, input2)
+    update_last_move(input1, input2)
     @board.update_moved(input1)
     @board.filter_mark(input1, input2)
   end
@@ -56,7 +58,7 @@ class Driver
                else
                  Bot.new('Computer', 'black')
                end
-    @cur_player = @player1
+    @cur_player = @player2
   end
 
   def update_turn
@@ -88,9 +90,25 @@ class Driver
     end
     move
   end
+
+  def update_last_move(last, n_move)
+    @last_move = "#{last} #{n_move}"
+  end
+
+  def check_upgrade
+    @board.grid.select { |pawn| pawn.piece.is_a?(Pawn) && [1, 8].include?(pawn.location[0]) }
+  end
+
+  def can_upgrade?
+    !check_upgrade.empty?
+  end
+
+  def upgrade(n_piece)
+    @board.replace_piece(check_upgrade[0], n_piece, @cur_player.color)
+  end
+
+  def winner
+    update_turn.name
+  end
 end
 
-# driver = Driver.new
-# driver.set_players('', '')
-# driver.board.restore_board('3k4/1q6/8/8/8/8/8/R3K2R')
-# p driver.get_moves(driver.board.grid[60])

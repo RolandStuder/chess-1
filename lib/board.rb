@@ -32,6 +32,8 @@ class Board
       rook_castle(cells[0].location, cells[1].location)
     elsif cells[0].piece.is_a?(King) && (cells[0].location[1] - cells[1].location[1]).abs > 1
       king_castle(cells[0].location, cells[1].location)
+    elsif cells[0].piece.is_a?(Pawn) && cells[1].location[1] != cells[0].location[1]
+      en_passant(cells[0], cells[0].location, cells[1].location)
     else
       mark_grid(cell1, cell2)
     end
@@ -62,6 +64,12 @@ class Board
     mark_grid(rook, cell1)
   end
 
+  def en_passant(tile, cell1, cell2)
+    remove = tile.color == 'white' ? [cell2[0] - 1, cell2[1]] : [cell2[0] + 1, cell2[1]]
+    mark_grid(cell1, cell2)
+    mark_grid(cell1, remove)
+  end
+
   def find_cell(cell)
     node = @grid.find { |x| x.location == cell || x.position == cell }
     @grid.index(node)
@@ -85,6 +93,11 @@ class Board
   def update_moved(tile)
     node = @grid[find_cell(tile)]
     node.piece.has_moved
+  end
+
+  def replace_piece(tile, new_p, color)
+    piece = KEYS[new_p.to_sym].new(color)
+    tile.piece = piece
   end
 end
 

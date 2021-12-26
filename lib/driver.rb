@@ -3,9 +3,12 @@ require_relative 'board'
 require_relative 'player'
 require_relative 'cell'
 require_relative 'ruleset'
+require_relative 'special_moves'
 require 'pry-byebug'
+
 class Driver
   include Ruleset
+  include Smoves
   attr_reader :board
 
   def initialize
@@ -22,7 +25,7 @@ class Driver
 
   def receive_input(input1, input2)
     @board.update_moved(input1)
-    @board.mark_grid(input1, input2)
+    @board.filter_mark(input1, input2)
   end
 
   def send_grid
@@ -35,7 +38,7 @@ class Driver
     node = @board.grid[@board.find_cell(tile)]
     not_empty?(node) &&
       belongs_to?(node) &&
-      has_moves?(node)
+      movable?(node)
   end
 
   def move_legal?(start, dest)
@@ -79,7 +82,7 @@ class Driver
 
   def select_move(input)
     move = @cur_player.move_select
-    until move_legal?(input , move)
+    until move_legal?(input, move)
       puts 'This is not a legal move! Please try again!' if @cur_player.is_a? Human
       move = @cur_player.move_select
     end
@@ -87,4 +90,7 @@ class Driver
   end
 end
 
-# p driver.selection_valid?('a1')e-21xx1
+# driver = Driver.new
+# driver.set_players('', '')
+# driver.board.restore_board('3k4/1q6/8/8/8/8/8/R3K2R')
+# p driver.get_moves(driver.board.grid[60])

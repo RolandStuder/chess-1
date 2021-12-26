@@ -2,7 +2,7 @@ require_relative 'helper'
 
 class Pieces
   attr_accessor :test_board
-  attr_reader :color
+  attr_reader :color, :starting
 
   def initialize(color = nil)
     @color = color

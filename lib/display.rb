@@ -21,7 +21,7 @@ module Display
       tile = get_tile(x)
       tile = put_piece(x, tile) unless x.size == 2
       print tile.join('')
-      print "#{x[0]}\n#{x[0]-1}" if line_break?(x)
+      print "#{x[0]}\n#{x[0] - 1}" if line_break?(x)
     end
     puts "1\n#{INDENT}"
   end
@@ -43,7 +43,7 @@ module Display
   end
 
   def line_break?(location)
-    return false if location[0..1] == [1,8]
+    return false if location[0..1] == [1, 8]
 
     location[1] == 8
   end

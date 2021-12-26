@@ -15,7 +15,7 @@ class Game
   def make_board
     @driver.init_board
   end
-  
+
   def call_inputs
     input1 = @driver.select_piece
     input2 = @driver.select_move(input1)
@@ -29,11 +29,11 @@ class Game
 
   def send_inputs
     inputs = call_inputs
-    @driver.receive_input(inputs[0],inputs[1])
+    @driver.receive_input(inputs[0], inputs[1])
   end
 
   def play
-    make_board
+    @driver.board.restore_board('r3k2r/8/8/8/8/4P3/8/R3K2R')
     make_players
     display
     loop do

@@ -6,14 +6,14 @@ module Ruleset
   end
 
   def not_empty?(tile)
-    !tile.piece.nil?
+    !tile.empty?
   end
 
   def belongs_to?(tile)
-    tile.piece.color == @cur_player.color
+    tile.color == @cur_player.color
   end
 
-  def has_moves?(tile)
+  def movable?(tile)
     moves = get_moves(tile)
     return false if moves.empty?
 
@@ -26,32 +26,25 @@ module Ruleset
   end
 
   def in_check?
-    all_moves = get_possible_moves(@cur_player.color, @board.grid, @board.refine_grid)
+    all_moves = get_possible_moves(@board.grid, @board.refine_grid)
     tile = find_king
-    return false if all_moves.empty?
+    return false if all_moves.nil?
 
     all_moves.include?(tile.location)
   end
 
   def find_king
-    @board.grid.each do |cell|
-      return cell if cell.piece.is_a?(King) && cell.piece.color == @cur_player.color
-    end
+    @board.grid.select { |cell| cell.piece.is_a?(King) && cell.color == @cur_player.color }[0]
   end
 
-  def get_possible_moves(color, grid, board)
-    move_set = []
-    grid.each do |cell|
-      next if cell.piece.nil? || cell.piece.color == color
+  def get_possible_moves(grid, board)
+    get_opponent_pieces(grid).map do |cell|
+      cell.piece.is_a?(Pawn) ? [cell.call_moves(board)[1]] : cell.call_moves(board)
+    end.delete_if(&:empty?).flatten(1).reduce(&:+)
+  end
 
-      moves = cell.piece.next_moves(cell.location, board)
-      moves = [cell.piece.all_moves(cell.location, board)[1]] if cell.piece.is_a? Pawn
-      move_set << moves
-    end
-    return [] if move_set.empty?
-
-    move_set.delete_if(&:empty?)
-    move_set.flatten(1).reduce(&:+)
+  def get_opponent_pieces(grid)
+    grid.select { |cell| !cell.piece.nil? && cell.piece.color != @cur_player.color }
   end
 
   def trim_king_moves(moveset)
@@ -100,9 +93,11 @@ module Ruleset
 
   def get_moves(tile)
     location = tile.location
-    moves = tile.piece.next_moves(location, @board.refine_grid)
+    moves = tile.call_moves(@board.refine_grid)
     if tile.piece.is_a? King
-      trim_king_moves(moves)
+      trim_king_moves(moves) + allow_castle('king')
+    elsif tile.piece.is_a?(Rook) && !in_check?
+      trim_piece_moves(moves, location) + allow_castle(location)
     elsif in_check?
       [trim_in_check(moves, location)]
     else

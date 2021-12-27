@@ -441,43 +441,43 @@ RSpec.describe Pawn do
   describe '#refine_attacks' do
     context 'It checks if a tile is attackable' do
       subject(:wpawn) { described_class.new('white') }
-      it 'when the tiles are empty' do 
-        attacks = [[3,1],[3,3]]
+      it 'when the tiles are empty' do
+        attacks = [[3, 1], [3, 3]]
         expect(wpawn.refine_attacks(attacks, board)).to eql([])
       end
 
-      it 'when the tiles are occupied by white pieces' do 
+      it 'when the tiles are occupied by white pieces' do
         board[40] << 'wpawn'
         board[43] << 'wpawn'
-        attacks = [[3,1],[3,3]]
+        attacks = [[3, 1], [3, 3]]
         expect(wpawn.refine_attacks(attacks, board)).to eql([])
       end
 
-      it 'when the tiles are occupied by black pieces' do 
+      it 'when the tiles are occupied by black pieces' do
         board[40] << 'bpawn'
         board[42] << 'bpawn'
-        attacks = [[3,1],[3,3]]
+        attacks = [[3, 1], [3, 3]]
         expect(wpawn.refine_attacks(attacks, board)).to eql(attacks)
       end
     end
   end
 
-  describe '#nexT_moves' do 
-    context 'It should output the correct refined moves for the pawn' do 
-      subject(:wpawn) {described_class.new('white')}
+  describe '#nexT_moves' do
+    context 'It should output the correct refined moves for the pawn' do
+      subject(:wpawn) { described_class.new('white') }
 
-      it 'when the pawn is moved, and can attack a black pc to right' do 
+      it 'when the pawn is moved, and can attack a black pc to right' do
         wpawn.has_moved
-        location = [2,2]
+        location = [2, 2]
         board[42] << 'bpawn'
-        expected = [[[3,2]], [[3,3]]]
+        expected = [[[3, 2]], [[3, 3]]]
         expect(wpawn.next_moves(location, board)).to eql(expected)
       end
 
-      it 'Outputs empty array when there are no moves' do 
-        location = [2,2]
+      it 'Outputs empty array when there are no moves' do
+        location = [2, 2]
         board[41] << 'wpawn'
-        expect(wpawn.next_moves(location, board)).to eql([[],[]])
+        expect(wpawn.next_moves(location, board)).to eql([[], []])
       end
     end
   end

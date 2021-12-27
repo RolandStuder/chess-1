@@ -28,15 +28,29 @@ class Board
 
   def filter_mark(cell1, cell2)
     cells = get_cells(cell1, cell2)
-    if cells[0].piece.is_a?(Rook) && cells[1].piece.is_a?(King)
+    if rook_and_king?(cells)
       rook_castle(cells[0].location, cells[1].location)
-    elsif cells[0].piece.is_a?(King) && (cells[0].location[1] - cells[1].location[1]).abs > 1
+    elsif king_and_castle?(cells)
       king_castle(cells[0].location, cells[1].location)
-    elsif cells[0].piece.is_a?(Pawn) && cells[1].location[1] != cells[0].location[1]
+    elsif pawn_and_en_passant?(cells)
       en_passant(cells[0], cells[0].location, cells[1].location)
     else
       mark_grid(cell1, cell2)
     end
+  end
+
+  def rook_and_king?(cells)
+    cells[0].piece.is_a?(Rook) && cells[1].piece.is_a?(King)
+  end
+
+  def king_and_castle?(cells)
+    cells[0].piece.is_a?(King) && (cells[0].location[1] - cells[1].location[1]).abs > 1
+  end
+
+  def pawn_and_en_passant?(cells)
+    cells[0].piece.is_a?(Pawn) &&
+      cells[1].location[1] != cells[0].location[1] &&
+      cells[1].empty?
   end
 
   def mark_grid(cell1, cell2)

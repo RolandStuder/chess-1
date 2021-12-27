@@ -1,21 +1,12 @@
 require_relative 'helper'
 
 class Pieces
-  attr_accessor :test_board
+  include Helper
   attr_reader :color, :starting
 
   def initialize(color = nil)
     @color = color
     @starting = true
-    @test_board = []
-  end
-
-  def make_test_board
-    (1..8).each do |i|
-      (1..8).each do |j|
-        @test_board << [i, j]
-      end
-    end
   end
 
   def has_moved
@@ -24,8 +15,7 @@ class Pieces
 end
 
 class Knight < Pieces
-  include Helper
-  MOVES = [[1, 2], [2, 1], [-1, 2], [-2, 1], [2, -1], [1, -2], [-1, -2], [-2, -1]]
+  MOVES = [[1, 2], [2, 1], [-1, 2], [-2, 1], [2, -1], [1, -2], [-1, -2], [-2, -1]].freeze
   def set_valid(start, board, increment)
     set = super
     [set[0]]
@@ -33,23 +23,18 @@ class Knight < Pieces
 end
 
 class Rook < Pieces
-  include Helper
-
-  MOVES = [[-1, 0], [1, 0], [0, 1], [0, -1]]
+  MOVES = [[-1, 0], [1, 0], [0, 1], [0, -1]].freeze
 end
 
 class Bishop < Pieces
-  include Helper
-  MOVES = [[1, 1], [-1, 1], [-1, -1], [1, -1]]
+  MOVES = [[1, 1], [-1, 1], [-1, -1], [1, -1]].freeze
 end
 
 class Queen < Pieces
-  include Helper
-  MOVES = [[1, 1], [-1, 1], [-1, -1], [1, -1], [-1, 0], [1, 0], [0, 1], [0, -1]]
+  MOVES = [[1, 1], [-1, 1], [-1, -1], [1, -1], [-1, 0], [1, 0], [0, 1], [0, -1]].freeze
 end
 
 class Pawn < Pieces
-  include Helper
   MOVES = { 'black' => [-1, 0], 'white' => [1, 0] }.freeze
   ATTACKS = { 'white' => [[1, -1], [1, 1]], 'black' => [[-1, -1], [-1, 1]] }.freeze
 
@@ -57,7 +42,7 @@ class Pawn < Pieces
     moves = set_valid(location, board, MOVES[@color])
     attacks = []
     ATTACKS[@color].each { |x| attacks << set_valid(location, board, x)[0] }
-    moves.keep_if { |x| x.all? { |y| y.between?(1, 8) } }
+    moves.keep_if { |x| x.all? { |y| y.between?(1, 8) } && board.include?(x) }
     attacks.keep_if { |x| x.all? { |y| y.between?(1, 8) } }
     [moves.compact, attacks.compact]
   end
@@ -88,8 +73,6 @@ class Pawn < Pieces
 end
 
 class King < Pieces
-  include Helper
-
   MOVES = [[1, 1], [-1, 1], [-1, -1], [1, -1], [-1, 0], [1, 0], [0, 1], [0, -1]].freeze
   def set_valid(start, board, increment)
     set = super

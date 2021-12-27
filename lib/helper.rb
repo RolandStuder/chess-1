@@ -27,7 +27,7 @@ module Helper
       next unless x[0..1] == tile
       return true if x.size == 2
 
-      x[2][0] != @color[0] ? (return true) : (return false)
+      return x[2][0] != @color[0]
     end
   end
 end

@@ -111,4 +111,3 @@ class Driver
     update_turn.name
   end
 end
-

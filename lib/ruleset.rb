@@ -22,6 +22,8 @@ module Ruleset
 
   def can_move?(location, tile)
     moves = get_moves(tile)
+    return false if moves.empty?
+
     moves.reduce(&:+).include?(location)
   end
 
@@ -39,7 +41,7 @@ module Ruleset
 
   def get_possible_moves(grid, board)
     get_opponent_pieces(grid).map do |cell|
-      cell.piece.is_a?(Pawn) ? [cell.call_moves(board)[1]] : cell.call_moves(board)
+      cell.piece.is_a?(Pawn) ? [cell.piece.all_moves(cell.location, board)[1]] : cell.call_moves(board)
     end.delete_if(&:empty?).flatten(1).reduce(&:+)
   end
 
@@ -72,6 +74,8 @@ module Ruleset
   end
 
   def trim_p_helper(location, moves)
+    return false if moves.empty?
+    
     moves.each do |move|
       @board.mark_grid(location, move)
       return false if in_check?

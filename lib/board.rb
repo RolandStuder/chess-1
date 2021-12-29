@@ -91,10 +91,7 @@ class Board
   end
 
   def restore_board(fen)
-    refined_notation = refine_notation(fen)
-    return 'Bad input' unless verify_notation(refined_notation)
-
-    fen_to_board(refined_notation)
+    fen_decode(fen)
   end
 
   def cloner(dummy)

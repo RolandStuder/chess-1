@@ -16,7 +16,7 @@ module Encoder
   end
 
   def restore_rights(notation)
-    keys = { 'K' => [1, 1], 'Q' => [1, 8], 'k' => [8, 1], 'q' => [8, 8] }
+    keys = { 'K' => [1, 8], 'Q' => [1, 1], 'k' => [8, 8], 'q' => [8, 1] }
     rights = notation.split('')
     keys.each_key do |key|
       next unless rights.include?(key)
@@ -78,10 +78,8 @@ module Encoder
       true
     elsif keyword == 'p' && location[0] == 2 && color == 'white'
       true
-    elsif keyword == 'k'
-      true
     else
-      false
+      keyword == 'k'
     end
   end
 

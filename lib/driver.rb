@@ -6,7 +6,7 @@ require_relative 'ruleset'
 require_relative 'special_moves'
 require 'pry-byebug'
 
-class Driver
+class Logic
   include Ruleset
   include Smoves
   attr_reader :board

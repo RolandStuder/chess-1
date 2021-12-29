@@ -35,4 +35,3 @@ class Bot < Player
     rand_select
   end
 end
-

@@ -4,7 +4,7 @@ require_relative 'driver'
 class Game
   include Display
   def initialize
-    @driver = Driver.new
+    @driver = Logic.new
     @id = nil
   end
 

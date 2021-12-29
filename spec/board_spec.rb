@@ -34,7 +34,7 @@ RSpec.describe Board do
       end
 
       it 'When the grid has no pieces' do
-        board.restore_board('8/8/8/8/8/8/8/8')
+        board.restore_board('8/8/8/8/8/8/8/8 w -')
         output = board.refine_grid.all? { |x| x.size == 2 }
 
         expect(output).to be_truthy
@@ -337,7 +337,7 @@ RSpec.describe Board do
       end
 
       it 'restores the board with valid notation' do
-        input = '8/8/8/8/8/8/8/8'
+        input = '8/8/8/8/8/8/8/8 w -'
         expect { board.restore_board(input) }.to change { board.grid.size }.to(64)
       end
     end
@@ -465,20 +465,32 @@ RSpec.describe Board do
       subject(:board) { described_class.new }
       it 'when the keyword is q' do
         expect(Cell).to receive(:new)
-        expect(Queen).to receive(:new).with('white')
+        expect(Queen).to receive(:new).with('white', { start: false })
         board.create_cell('q', 'white', [1, 2])
       end
 
       it 'when the keyword is n' do
         expect(Cell).to receive(:new)
-        expect(Knight).to receive(:new).with('black')
+        expect(Knight).to receive(:new).with('black', { start: false })
         board.create_cell('n', 'black', [2, 1])
       end
 
       it 'when the keyword is b' do
         expect(Cell).to receive(:new)
-        expect(Bishop).to receive(:new).with('black')
+        expect(Bishop).to receive(:new).with('black', { start: false })
         board.create_cell('b', 'black', [2, 1])
+      end
+
+      it 'when the keyword is p' do
+        expect(Cell).to receive(:new)
+        expect(Pawn).to receive(:new).with('white', { start: true })
+        board.create_cell('p', 'white', [2, 1])
+      end
+
+      it 'when the keyword is k' do
+        expect(Cell).to receive(:new)
+        expect(King).to receive(:new).with('black', { start: true })
+        board.create_cell('k', 'black', [2, 1])
       end
 
       it 'when the keyword is emp' do
@@ -504,4 +516,60 @@ RSpec.describe Board do
       end
     end
   end
+
+  describe '#return_turn' do
+    context 'Should return the correct color per keyword' do
+      subject(:board) { described_class.new }
+      it 'when the keyword is w' do
+        expect(board.return_turn('w')).to eql('white')
+      end
+
+      it 'when the keyword is b' do
+        expect(board.return_turn('b')).to eql('black')
+      end
+    end
+  end
+
+  describe '#restore_rights' do
+    context 'It sets the castling rights for pieces' do
+      subject(:board) { described_class.new }
+      before do
+        board.fen_decode('r6r/8/8/8/8/8/8/R6R w -')
+      end
+
+      let(:q) { board.grid[0] }
+      let(:k) { board.grid[7] }
+      let(:wq) { board.grid[56] }
+      let(:wk) { board.grid[63] }
+
+      RSpec::Matchers.define_negated_matcher :not_change, :change
+
+      it 'When KQqk is passed in' do
+        expect { board.restore_rights('KQkq') }.to change { q.piece.starting }.to(true)
+                                                                              .and change { k.piece.starting }.to(true)
+                                                                                                              .and change {
+                                                                                                                     wq.piece.starting
+                                                                                                                   }.to(true)
+          .and change {
+                 wk.piece.starting
+               }.to(true)
+      end
+
+      it 'when - is passed in' do
+        expect { board.restore_rights('-') }.to not_change { q.piece.starting }
+          .and not_change { k.piece.starting }
+          .and not_change { wq.piece.starting }
+          .and not_change { wk.piece.starting }
+      end
+
+      it 'when Qq is passed in' do
+        expect { board.restore_rights('Qq') }.to change { q.piece.starting }.to(true)
+                                                                            .and not_change { k.piece.starting }
+          .and change { wq.piece.starting }.to(true)
+                                           .and not_change { wk.piece.starting }
+      end
+    end
+  end
+
+  # -- encoder--
 end

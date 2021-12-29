@@ -4,9 +4,9 @@ class Pieces
   include Helper
   attr_reader :color, :starting
 
-  def initialize(color = nil)
+  def initialize(color, start: true)
     @color = color
-    @starting = true
+    @starting = start
   end
 
   def has_moved

@@ -20,4 +20,19 @@ class Human < Player
 end
 
 class Bot < Player
+  # aka the dumb bot!
+  def rand_select
+    rand1 = ('a'..'h').to_a.sample(1)[0]
+    rand2 = rand(1..8)
+    "#{rand1}#{rand2}"
+  end
+
+  def piece_select
+    rand_select
+  end
+
+  def move_select
+    rand_select
+  end
 end
+

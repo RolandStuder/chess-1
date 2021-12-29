@@ -11,11 +11,8 @@ class Board
   end
 
   def create_new_board
-    fen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR'
-    refined_notation = refine_notation(fen)
-    return 'bad notation' unless verify_notation(refined_notation)
-
-    fen_to_board(refined_notation)
+    fen = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq'
+    fen_decode(fen)
   end
 
   def refine_grid
@@ -114,7 +111,3 @@ class Board
     tile.piece = piece
   end
 end
-
-# board = Board.new
-# board.create_new_board
-# p board.find_cell([1,1])

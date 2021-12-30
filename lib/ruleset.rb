@@ -67,15 +67,15 @@ module Ruleset
     refined = []
     moveset.each do |moves|
       clone_dummy
-      refined << moves if trim_p_helper(location, moves)
+      refined << moves if trim_piece_helper(location, moves)
     end
     clone_dummy
     refined
   end
 
-  def trim_p_helper(location, moves)
+  def trim_piece_helper(location, moves)
     return false if moves.empty?
-    
+
     moves.each do |move|
       @board.mark_grid(location, move)
       return false if in_check?

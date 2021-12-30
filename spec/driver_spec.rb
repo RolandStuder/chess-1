@@ -260,44 +260,44 @@ RSpec.describe Logic do
     end
   end
 
-  describe '#get_opponent_pieces' do 
+  describe '#get_opponent_pieces' do
     context 'It returns all the pieces of the opponent' do
       subject(:driver) { described_class.new }
       before do
         driver.instance_variable_set('@cur_player', Player.new('', 'white'))
       end
 
-      it 'When there are no black pieces' do 
+      it 'When there are no black pieces' do
         expected = []
         driver.board.restore_board('4N3/8/8/3R4/5K2/2Q5/8/8 w - - 0 1')
         expect(driver.get_opponent_pieces(driver.board.grid)).to eql(expected)
       end
 
-      it 'When there are two pawns' do 
-        expected = ['Pawn', 'Pawn']
+      it 'When there are two pawns' do
+        expected = %w[Pawn Pawn]
         driver.board.restore_board('4N3/2p2p2/8/3R4/5K2/2Q5/8/8 w - - 0 1')
-        outcome = driver.get_opponent_pieces(driver.board.grid).map {|x| x.piece.class.to_s}
+        outcome = driver.get_opponent_pieces(driver.board.grid).map { |x| x.piece.class.to_s }
         expect(outcome).to eql(expected)
       end
 
-      it 'When there is a queen and a king' do 
-        expected = ['Queen', 'King']
+      it 'When there is a queen and a king' do
+        expected = %w[Queen King]
         driver.board.restore_board('8/2q5/8/4k3/8/8/8/8 w - - 0 1')
-        outcome = driver.get_opponent_pieces(driver.board.grid).map {|x| x.piece.class.to_s}
+        outcome = driver.get_opponent_pieces(driver.board.grid).map { |x| x.piece.class.to_s }
         expect(outcome).to eql(expected)
       end
 
-      it 'When there is a knight and a bishop' do 
-        expected = ['Bishop', 'Knight']
+      it 'When there is a knight and a bishop' do
+        expected = %w[Bishop Knight]
         driver.board.restore_board('5b2/8/2n5/8/8/8/8/8 w - - 0 1')
-        outcome = driver.get_opponent_pieces(driver.board.grid).map {|x| x.piece.class.to_s}
+        outcome = driver.get_opponent_pieces(driver.board.grid).map { |x| x.piece.class.to_s }
         expect(outcome).to eql(expected)
       end
 
-      it 'When there are 3 kings' do 
-        expected = ['King', 'King', 'King']
+      it 'When there are 3 kings' do
+        expected = %w[King King King]
         driver.board.restore_board('8/2kkk3/8/8/8/8/8/8 w - - 0 1')
-        outcome = driver.get_opponent_pieces(driver.board.grid).map {|x| x.piece.class.to_s}
+        outcome = driver.get_opponent_pieces(driver.board.grid).map { |x| x.piece.class.to_s }
         expect(outcome).to eql(expected)
       end
     end
@@ -305,8 +305,8 @@ RSpec.describe Logic do
 
   describe '#trim_king_moves' do
     context 'It trims the kings moves and avoids illegal moves' do
-      subject(:king) {described_class.new}
-      before do 
+      subject(:king) { described_class.new }
+      before do
         king.instance_variable_set('@cur_player', Player.new('', 'white'))
       end
 
@@ -318,26 +318,26 @@ RSpec.describe Logic do
 
       it 'When the king`s left file is under attack' do
         king.board.restore_board('2r5/8/8/8/3K4/8/8/8 w - - 0 1')
-        expected = [[[5,4]], [[5,5]], [[4,5]], [[3,5]], [[3,4]]].sort
+        expected = [[[5, 4]], [[5, 5]], [[4, 5]], [[3, 5]], [[3, 4]]].sort
         moves = king.find_king.call_moves(king.board.refine_grid)
         expect(king.trim_king_moves(moves).sort).to eql(expected)
       end
 
-      it 'When both files are under attack' do 
+      it 'When both files are under attack' do
         king.board.restore_board('2r1r3/8/8/8/3K4/8/8/8 w - - 0 1')
-        expected = [[[5,4]], [[3,4]]].sort
+        expected = [[[5, 4]], [[3, 4]]].sort
         moves = king.find_king.call_moves(king.board.refine_grid)
         expect(king.trim_king_moves(moves).sort).to eql(expected)
       end
 
-      it 'When both files and the bottom rank are under attack by pawns' do 
+      it 'When both files and the bottom rank are under attack by pawns' do
         king.board.restore_board('8/8/1p3p2/1p3p2/1ppKpp2/8/8/8 w - - 0 1')
-        expected = [[[5,4]]].sort
+        expected = [[[5, 4]]].sort
         moves = king.find_king.call_moves(king.board.refine_grid)
         expect(king.trim_king_moves(moves).sort).to eql(expected)
       end
 
-      it 'When the king is surrounded' do 
+      it 'When the king is surrounded' do
         king.board.restore_board('2r5/8/8/7r/3K4/r7/8/4r3 w - - 0 1')
         expected = []
         moves = king.find_king.call_moves(king.board.refine_grid)
@@ -347,9 +347,9 @@ RSpec.describe Logic do
   end
 
   describe '#trim_piece_moves' do
-    context 'It trims off all moves that might leave the king in check' do 
-      subject(:piece) {described_class.new}
-      before do 
+    context 'It trims off all moves that might leave the king in check' do
+      subject(:piece) { described_class.new }
+      before do
         piece.instance_variable_set('@cur_player', Player.new('', 'white'))
       end
 
@@ -357,21 +357,240 @@ RSpec.describe Logic do
         piece.board.restore_board('3q4/8/8/8/8/8/3B4/3K4 w - - 0 1')
         moves = piece.board.grid[51].call_moves(piece.board.refine_grid)
         expected = []
-        expect(piece.trim_piece_moves(moves, [2,4]).sort).to eql(expected)
+        expect(piece.trim_piece_moves(moves, [2, 4]).sort).to eql(expected)
       end
 
       it 'When a rook in front of the queen is blocking the king' do
         piece.board.restore_board('8/8/8/8/3q4/8/3R4/3K4 w - - 0 1')
         moves = piece.board.grid[51].call_moves(piece.board.refine_grid)
-        expected = [[[3,4], [4,4]]]
-        expect(piece.trim_piece_moves(moves, [2,4]).sort).to eql(expected)
+        expected = [[[3, 4], [4, 4]]]
+        expect(piece.trim_piece_moves(moves, [2, 4]).sort).to eql(expected)
       end
 
       it 'When a Pawn in front of the queen is blocking the king' do
         piece.board.restore_board('3q4/8/8/8/8/8/3P4/3K4 w - - 0 1')
         moves = piece.board.grid[51].call_moves(piece.board.refine_grid)
-        expected = [[[3,4], [4,4]]]
-        expect(piece.trim_piece_moves(moves, [2,4]).sort).to eql(expected)
+        expected = [[[3, 4], [4, 4]]]
+        expect(piece.trim_piece_moves(moves, [2, 4]).sort).to eql(expected)
+      end
+
+      it 'When a Pawn blacks the queen in diagonals' do
+        piece.board.restore_board('8/8/8/6q1/8/8/3P4/2K5 w - - 0 1')
+        moves = piece.board.grid[51].call_moves(piece.board.refine_grid)
+        expected = []
+        expect(piece.trim_piece_moves(moves, [2, 4]).sort).to eql(expected)
+      end
+
+      it 'When the rook is free to move' do
+        piece.board.restore_board('8/8/q7/8/8/8/3R4/2K5 w - - 0 1')
+        moves = piece.board.grid[51].call_moves(piece.board.refine_grid)
+        expected = moves.sort
+        expect(piece.trim_piece_moves(moves, [2, 4]).sort).to eql(expected)
+      end
+    end
+  end
+
+  describe '#trim_piece_helper' do
+    context 'It should return true if a move in one direction does not leave the king in check' do
+      subject(:piece) { described_class.new }
+      before do
+        piece.instance_variable_set('@cur_player', Player.new('', 'white'))
+      end
+
+      it 'King in check - Bishop moves' do
+        piece.board.restore_board('3q4/8/8/8/8/8/3B4/3K4 w - - 0 1')
+        moves = [[3, 3], [4, 2], [5, 1]]
+        expect(piece.trim_piece_helper([2, 4], moves)).to be_falsy
+      end
+
+      it 'King in check, Knight moves' do
+        piece.board.restore_board('8/8/8/8/3q4/8/3N4/3K4 w - - 0 1')
+        moves = [[4, 3]]
+        expect(piece.trim_piece_helper([2, 4], moves)).to be_falsy
+      end
+
+      it 'King in check, pawn moves' do
+        piece.board.restore_board('3q4/8/8/8/8/2p5/3P4/3K4 w - - 0 1')
+        moves = [[3, 3]]
+        expect(piece.trim_piece_helper([2, 4], moves)).to be_falsy
+      end
+
+      it 'King in check, rook moves but in same direction' do
+        piece.board.restore_board('8/8/8/3q4/8/8/3R4/3K4 w - - 0 1')
+        moves = [[3, 4], [4, 4], [5, 4]]
+        expect(piece.trim_piece_helper([2, 4], moves)).to be_truthy
+      end
+
+      it 'pawn moves - King not in check' do
+        piece.board.restore_board('8/7q/8/8/8/8/3P4/3K4 w - - 0 1')
+        moves = [[3, 4], [4, 4]]
+        expect(piece.trim_piece_helper([2, 4], moves)).to be_truthy
+      end
+    end
+  end
+
+  describe '#trim_in_check' do
+    context 'It should return the moves a piece can make to save the king in check' do
+      subject(:piece) { described_class.new }
+      before do
+        piece.instance_variable_set('@cur_player', Player.new('', 'white'))
+      end
+
+      it 'King in check - Bishop can save' do
+        piece.board.restore_board('8/q7/8/8/8/4K3/8/B7 w - - 0 1')
+        moves = piece.board.grid[56].call_moves(piece.board.refine_grid)
+        expected = [[4, 4]]
+        expect(piece.trim_in_check(moves, [1, 1])).to eql(expected)
+      end
+
+      it 'King in check, Knight can save' do
+        piece.board.restore_board('8/8/4q3/2N5/8/4K3/8/8 w - - 0 1')
+        moves = piece.board.grid[26].call_moves(piece.board.refine_grid)
+        expected = [[4, 5], [6, 5]].sort
+        expect(piece.trim_in_check(moves, [5, 3]).sort).to eql(expected)
+      end
+
+      it 'King in check, pawn cannot save' do
+        piece.board.restore_board('8/8/4q3/2P5/8/4K3/8/8 w - - 0 1')
+        moves = piece.board.grid[26].call_moves(piece.board.refine_grid)
+        expected = []
+        expect(piece.trim_in_check(moves, [5, 3]).sort).to eql(expected)
+      end
+
+      it 'King in check, pawn can save' do
+        piece.board.restore_board('8/8/4q3/3P4/8/4K3/8/8 w - - 0 1')
+        moves = piece.board.grid[27].call_moves(piece.board.refine_grid)
+        expected = [[6, 5]]
+        expect(piece.trim_in_check(moves, [5, 4]).sort).to eql(expected)
+      end
+
+      it 'king in check - Queen can save' do
+        piece.board.restore_board('4q3/8/8/1Q6/8/8/8/4K3 w - - 0 1')
+        moves = piece.board.grid[25].call_moves(piece.board.refine_grid)
+        expected = [[8, 5], [5, 5], [2, 5]].sort
+        expect(piece.trim_in_check(moves, [5, 2]).sort).to eql(expected)
+      end
+    end
+  end
+
+  describe '#win?' do
+    context 'It returns true if a checkmate is made' do
+      subject(:driver) { described_class.new }
+      before do
+        driver.instance_variable_set('@cur_player', Player.new('', 'black'))
+      end
+
+      # win conditions
+
+      it '#When the game is won' do
+        driver.board.restore_board('3k2Q1/1R6/8/8/8/8/5B2/3K4 b - - 0 1')
+        expect(driver.win?).to be_truthy
+      end
+
+      it '#When the game is won' do
+        driver.board.restore_board('8/8/5NRk/5K2/8/8/8/8 b - - 0 1')
+        expect(driver.win?).to be_truthy
+      end
+
+      it '#When the game is won' do
+        driver.board.restore_board('8/8/8/8/8/8/2Q5/K3Q1k1 b - - 0 1')
+        expect(driver.win?).to be_truthy
+      end
+
+      it '#When the game is won' do
+        driver.board.restore_board('2k5/8/1KN1B3/8/8/B7/8/8 b - - 0 1')
+        expect(driver.win?).to be_truthy
+      end
+
+      it '#When the game is won' do
+        driver.board.restore_board('8/8/8/6B1/8/2N5/2N3K1/4k3 b - - 0 1')
+        expect(driver.win?).to be_truthy
+      end
+
+      it '#When the game is not won' do
+        driver.board.restore_board('2k5/B7/Q2K4/8/8/7q/8/8 b - - 0 2')
+        expect(driver.win?).to be_falsy
+      end
+
+      it '#When the game is not won' do
+        driver.board.restore_board('K7/B6b/4k3/8/8/8/8/Q7 b - - 0 2')
+        expect(driver.win?).to be_falsy
+      end
+
+      it '#When the game is not won' do
+        driver.board.restore_board('K1n3Q1/2k4B/8/8/8/8/8/8 b - - 0 2')
+        expect(driver.win?).to be_falsy
+      end
+
+      it '#When the game is not won' do
+        driver.board.restore_board('3k4/8/2NK4/8/Q7/8/8/6q1 b - - 0 2')
+        expect(driver.win?).to be_falsy
+      end
+
+      it '#When the game is not won' do
+        driver.board.restore_board('K5N1/1Q6/8/5k2/8/3b4/8/8 b - - 0 2')
+        expect(driver.win?).to be_falsy
+      end
+    end
+  end
+
+  describe '#draw?' do
+    context 'It returns true if a draw' do
+      subject(:driver) { described_class.new }
+      before do
+        driver.instance_variable_set('@cur_player', Player.new('', 'black'))
+      end
+
+      # win conditions
+
+      it '#When the game is draw' do
+        driver.board.restore_board('3k4/8/8/8/8/8/8/3K4 w - - 0 1')
+        expect(driver.draw?).to be_truthy
+      end
+
+      it '#When the game is draw' do
+        driver.board.restore_board('3k4/7R/2R1R3/8/8/8/8/3K4 w - - 0 1')
+        expect(driver.draw?).to be_truthy
+      end
+
+      it '#When the game is draw' do
+        driver.board.restore_board('3k4/7R/6B1/5B2/8/8/8/3K4 w - - 0 1')
+        expect(driver.draw?).to be_truthy
+      end
+
+      it '#When the game is draw' do
+        driver.board.restore_board('k7/8/1Q6/8/8/8/8/3K4 w - - 0 1')
+        expect(driver.draw?).to be_truthy
+      end
+
+      it '#When the game is draw' do
+        driver.board.restore_board('k7/7R/8/8/8/8/8/1R1K4 w - - 0 1')
+        expect(driver.draw?).to be_truthy
+      end
+
+      it '#When the game is not draw' do
+        driver.board.restore_board('2k5/B7/Q2K4/8/8/7q/8/8 b - - 0 2')
+        expect(driver.draw?).to be_falsy
+      end
+
+      it '#When the game is not draw' do
+        driver.board.restore_board('K7/B6b/4k3/8/8/8/8/Q7 b - - 0 2')
+        expect(driver.draw?).to be_falsy
+      end
+
+      it '#When the game is not draw' do
+        driver.board.restore_board('K1n3Q1/2k4B/8/8/8/8/8/8 b - - 0 2')
+        expect(driver.draw?).to be_falsy
+      end
+
+      it '#When the game is not draw' do
+        driver.board.restore_board('3k4/8/2NK4/8/Q7/8/8/6q1 b - - 0 2')
+        expect(driver.draw?).to be_falsy
+      end
+
+      it '#When the game is not draw' do
+        driver.board.restore_board('K5N1/1Q6/8/5k2/8/3b4/8/8 b - - 0 2')
+        expect(driver.draw?).to be_falsy
       end
     end
   end

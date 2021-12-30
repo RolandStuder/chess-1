@@ -1,0 +1,716 @@
+--- !ruby/object:Logic
+board: !ruby/object:Board
+  grid:
+  - !ruby/object:Cell
+    location: &2
+    - 8
+    - 1
+    position: a8
+    piece: &3 !ruby/object:Rook
+      color: black
+      starting: true
+  - !ruby/object:Cell
+    location: &4
+    - 8
+    - 2
+    position: b8
+    piece: &5 !ruby/object:Knight
+      color: black
+      starting: false
+  - !ruby/object:Cell
+    location: &6
+    - 8
+    - 3
+    position: c8
+    piece: &7 !ruby/object:Bishop
+      color: black
+      starting: false
+  - !ruby/object:Cell
+    location: &8
+    - 8
+    - 4
+    position: d8
+    piece: &9 !ruby/object:Queen
+      color: black
+      starting: false
+  - !ruby/object:Cell
+    location: &10
+    - 8
+    - 5
+    position: e8
+    piece: &11 !ruby/object:King
+      color: black
+      starting: true
+  - !ruby/object:Cell
+    location: &12
+    - 8
+    - 6
+    position: f8
+    piece: &13 !ruby/object:Bishop
+      color: black
+      starting: false
+  - !ruby/object:Cell
+    location: &14
+    - 8
+    - 7
+    position: g8
+    piece: &15 !ruby/object:Knight
+      color: black
+      starting: false
+  - !ruby/object:Cell
+    location: &16
+    - 8
+    - 8
+    position: h8
+    piece: &17 !ruby/object:Rook
+      color: black
+      starting: true
+  - !ruby/object:Cell
+    location: &18
+    - 7
+    - 1
+    position: a7
+    piece: &19 !ruby/object:Pawn
+      color: black
+      starting: true
+  - !ruby/object:Cell
+    location: &20
+    - 7
+    - 2
+    position: b7
+    piece: &21 !ruby/object:Pawn
+      color: black
+      starting: true
+  - !ruby/object:Cell
+    location: &22
+    - 7
+    - 3
+    position: c7
+    piece: &23 !ruby/object:Pawn
+      color: black
+      starting: true
+  - !ruby/object:Cell
+    location: &24
+    - 7
+    - 4
+    position: d7
+    piece: &25 !ruby/object:Pawn
+      color: black
+      starting: true
+  - !ruby/object:Cell
+    location: &26
+    - 7
+    - 5
+    position: e7
+    piece: &27 !ruby/object:Pawn
+      color: black
+      starting: true
+  - !ruby/object:Cell
+    location: &28
+    - 7
+    - 6
+    position: f7
+    piece: &29 !ruby/object:Pawn
+      color: black
+      starting: true
+  - !ruby/object:Cell
+    location: &30
+    - 7
+    - 7
+    position: g7
+    piece: &31 !ruby/object:Pawn
+      color: black
+      starting: true
+  - !ruby/object:Cell
+    location: &32
+    - 7
+    - 8
+    position: h7
+    piece: &33 !ruby/object:Pawn
+      color: black
+      starting: true
+  - !ruby/object:Cell
+    location: &34
+    - 6
+    - 1
+    position: a6
+    piece: 
+  - !ruby/object:Cell
+    location: &35
+    - 6
+    - 2
+    position: b6
+    piece: 
+  - !ruby/object:Cell
+    location: &36
+    - 6
+    - 3
+    position: c6
+    piece: 
+  - !ruby/object:Cell
+    location: &37
+    - 6
+    - 4
+    position: d6
+    piece: 
+  - !ruby/object:Cell
+    location: &38
+    - 6
+    - 5
+    position: e6
+    piece: 
+  - !ruby/object:Cell
+    location: &39
+    - 6
+    - 6
+    position: f6
+    piece: 
+  - !ruby/object:Cell
+    location: &40
+    - 6
+    - 7
+    position: g6
+    piece: 
+  - !ruby/object:Cell
+    location: &41
+    - 6
+    - 8
+    position: h6
+    piece: 
+  - !ruby/object:Cell
+    location: &42
+    - 5
+    - 1
+    position: a5
+    piece: 
+  - !ruby/object:Cell
+    location: &43
+    - 5
+    - 2
+    position: b5
+    piece: 
+  - !ruby/object:Cell
+    location: &44
+    - 5
+    - 3
+    position: c5
+    piece: 
+  - !ruby/object:Cell
+    location: &45
+    - 5
+    - 4
+    position: d5
+    piece: 
+  - !ruby/object:Cell
+    location: &46
+    - 5
+    - 5
+    position: e5
+    piece: 
+  - !ruby/object:Cell
+    location: &47
+    - 5
+    - 6
+    position: f5
+    piece: 
+  - !ruby/object:Cell
+    location: &48
+    - 5
+    - 7
+    position: g5
+    piece: 
+  - !ruby/object:Cell
+    location: &49
+    - 5
+    - 8
+    position: h5
+    piece: 
+  - !ruby/object:Cell
+    location: &50
+    - 4
+    - 1
+    position: a4
+    piece: &67 !ruby/object:Pawn
+      color: white
+      starting: false
+  - !ruby/object:Cell
+    location: &51
+    - 4
+    - 2
+    position: b4
+    piece: 
+  - !ruby/object:Cell
+    location: &52
+    - 4
+    - 3
+    position: c4
+    piece: 
+  - !ruby/object:Cell
+    location: &53
+    - 4
+    - 4
+    position: d4
+    piece: 
+  - !ruby/object:Cell
+    location: &54
+    - 4
+    - 5
+    position: e4
+    piece: 
+  - !ruby/object:Cell
+    location: &55
+    - 4
+    - 6
+    position: f4
+    piece: 
+  - !ruby/object:Cell
+    location: &56
+    - 4
+    - 7
+    position: g4
+    piece: 
+  - !ruby/object:Cell
+    location: &57
+    - 4
+    - 8
+    position: h4
+    piece: 
+  - !ruby/object:Cell
+    location: &58
+    - 3
+    - 1
+    position: a3
+    piece: 
+  - !ruby/object:Cell
+    location: &59
+    - 3
+    - 2
+    position: b3
+    piece: 
+  - !ruby/object:Cell
+    location: &60
+    - 3
+    - 3
+    position: c3
+    piece: 
+  - !ruby/object:Cell
+    location: &61
+    - 3
+    - 4
+    position: d3
+    piece: 
+  - !ruby/object:Cell
+    location: &62
+    - 3
+    - 5
+    position: e3
+    piece: 
+  - !ruby/object:Cell
+    location: &63
+    - 3
+    - 6
+    position: f3
+    piece: 
+  - !ruby/object:Cell
+    location: &64
+    - 3
+    - 7
+    position: g3
+    piece: 
+  - !ruby/object:Cell
+    location: &65
+    - 3
+    - 8
+    position: h3
+    piece: 
+  - !ruby/object:Cell
+    location: &66
+    - 2
+    - 1
+    position: a2
+    piece: 
+  - !ruby/object:Cell
+    location: &68
+    - 2
+    - 2
+    position: b2
+    piece: &69 !ruby/object:Pawn
+      color: white
+      starting: true
+  - !ruby/object:Cell
+    location: &70
+    - 2
+    - 3
+    position: c2
+    piece: &71 !ruby/object:Pawn
+      color: white
+      starting: true
+  - !ruby/object:Cell
+    location: &72
+    - 2
+    - 4
+    position: d2
+    piece: &73 !ruby/object:Pawn
+      color: white
+      starting: true
+  - !ruby/object:Cell
+    location: &74
+    - 2
+    - 5
+    position: e2
+    piece: &75 !ruby/object:Pawn
+      color: white
+      starting: true
+  - !ruby/object:Cell
+    location: &76
+    - 2
+    - 6
+    position: f2
+    piece: &77 !ruby/object:Pawn
+      color: white
+      starting: true
+  - !ruby/object:Cell
+    location: &78
+    - 2
+    - 7
+    position: g2
+    piece: &79 !ruby/object:Pawn
+      color: white
+      starting: true
+  - !ruby/object:Cell
+    location: &80
+    - 2
+    - 8
+    position: h2
+    piece: &81 !ruby/object:Pawn
+      color: white
+      starting: true
+  - !ruby/object:Cell
+    location: &82
+    - 1
+    - 1
+    position: a1
+    piece: &83 !ruby/object:Rook
+      color: white
+      starting: true
+  - !ruby/object:Cell
+    location: &84
+    - 1
+    - 2
+    position: b1
+    piece: &85 !ruby/object:Knight
+      color: white
+      starting: false
+  - !ruby/object:Cell
+    location: &86
+    - 1
+    - 3
+    position: c1
+    piece: &87 !ruby/object:Bishop
+      color: white
+      starting: false
+  - !ruby/object:Cell
+    location: &88
+    - 1
+    - 4
+    position: d1
+    piece: &89 !ruby/object:Queen
+      color: white
+      starting: false
+  - !ruby/object:Cell
+    location: &90
+    - 1
+    - 5
+    position: e1
+    piece: &91 !ruby/object:King
+      color: white
+      starting: true
+  - !ruby/object:Cell
+    location: &92
+    - 1
+    - 6
+    position: f1
+    piece: &93 !ruby/object:Bishop
+      color: white
+      starting: false
+  - !ruby/object:Cell
+    location: &94
+    - 1
+    - 7
+    position: g1
+    piece: &95 !ruby/object:Knight
+      color: white
+      starting: false
+  - !ruby/object:Cell
+    location: &96
+    - 1
+    - 8
+    position: h1
+    piece: &97 !ruby/object:Rook
+      color: white
+      starting: true
+player1: &1 !ruby/object:Human
+  name: heck
+  color: white
+player2: !ruby/object:Human
+  name: kek
+  color: black
+cur_player: *1
+dummy_board:
+- !ruby/object:Cell
+  location: *2
+  position: a8
+  piece: *3
+- !ruby/object:Cell
+  location: *4
+  position: b8
+  piece: *5
+- !ruby/object:Cell
+  location: *6
+  position: c8
+  piece: *7
+- !ruby/object:Cell
+  location: *8
+  position: d8
+  piece: *9
+- !ruby/object:Cell
+  location: *10
+  position: e8
+  piece: *11
+- !ruby/object:Cell
+  location: *12
+  position: f8
+  piece: *13
+- !ruby/object:Cell
+  location: *14
+  position: g8
+  piece: *15
+- !ruby/object:Cell
+  location: *16
+  position: h8
+  piece: *17
+- !ruby/object:Cell
+  location: *18
+  position: a7
+  piece: *19
+- !ruby/object:Cell
+  location: *20
+  position: b7
+  piece: *21
+- !ruby/object:Cell
+  location: *22
+  position: c7
+  piece: *23
+- !ruby/object:Cell
+  location: *24
+  position: d7
+  piece: *25
+- !ruby/object:Cell
+  location: *26
+  position: e7
+  piece: *27
+- !ruby/object:Cell
+  location: *28
+  position: f7
+  piece: *29
+- !ruby/object:Cell
+  location: *30
+  position: g7
+  piece: *31
+- !ruby/object:Cell
+  location: *32
+  position: h7
+  piece: *33
+- !ruby/object:Cell
+  location: *34
+  position: a6
+  piece: 
+- !ruby/object:Cell
+  location: *35
+  position: b6
+  piece: 
+- !ruby/object:Cell
+  location: *36
+  position: c6
+  piece: 
+- !ruby/object:Cell
+  location: *37
+  position: d6
+  piece: 
+- !ruby/object:Cell
+  location: *38
+  position: e6
+  piece: 
+- !ruby/object:Cell
+  location: *39
+  position: f6
+  piece: 
+- !ruby/object:Cell
+  location: *40
+  position: g6
+  piece: 
+- !ruby/object:Cell
+  location: *41
+  position: h6
+  piece: 
+- !ruby/object:Cell
+  location: *42
+  position: a5
+  piece: 
+- !ruby/object:Cell
+  location: *43
+  position: b5
+  piece: 
+- !ruby/object:Cell
+  location: *44
+  position: c5
+  piece: 
+- !ruby/object:Cell
+  location: *45
+  position: d5
+  piece: 
+- !ruby/object:Cell
+  location: *46
+  position: e5
+  piece: 
+- !ruby/object:Cell
+  location: *47
+  position: f5
+  piece: 
+- !ruby/object:Cell
+  location: *48
+  position: g5
+  piece: 
+- !ruby/object:Cell
+  location: *49
+  position: h5
+  piece: 
+- !ruby/object:Cell
+  location: *50
+  position: a4
+  piece: 
+- !ruby/object:Cell
+  location: *51
+  position: b4
+  piece: 
+- !ruby/object:Cell
+  location: *52
+  position: c4
+  piece: 
+- !ruby/object:Cell
+  location: *53
+  position: d4
+  piece: 
+- !ruby/object:Cell
+  location: *54
+  position: e4
+  piece: 
+- !ruby/object:Cell
+  location: *55
+  position: f4
+  piece: 
+- !ruby/object:Cell
+  location: *56
+  position: g4
+  piece: 
+- !ruby/object:Cell
+  location: *57
+  position: h4
+  piece: 
+- !ruby/object:Cell
+  location: *58
+  position: a3
+  piece: 
+- !ruby/object:Cell
+  location: *59
+  position: b3
+  piece: 
+- !ruby/object:Cell
+  location: *60
+  position: c3
+  piece: 
+- !ruby/object:Cell
+  location: *61
+  position: d3
+  piece: 
+- !ruby/object:Cell
+  location: *62
+  position: e3
+  piece: 
+- !ruby/object:Cell
+  location: *63
+  position: f3
+  piece: 
+- !ruby/object:Cell
+  location: *64
+  position: g3
+  piece: 
+- !ruby/object:Cell
+  location: *65
+  position: h3
+  piece: 
+- !ruby/object:Cell
+  location: *66
+  position: a2
+  piece: *67
+- !ruby/object:Cell
+  location: *68
+  position: b2
+  piece: *69
+- !ruby/object:Cell
+  location: *70
+  position: c2
+  piece: *71
+- !ruby/object:Cell
+  location: *72
+  position: d2
+  piece: *73
+- !ruby/object:Cell
+  location: *74
+  position: e2
+  piece: *75
+- !ruby/object:Cell
+  location: *76
+  position: f2
+  piece: *77
+- !ruby/object:Cell
+  location: *78
+  position: g2
+  piece: *79
+- !ruby/object:Cell
+  location: *80
+  position: h2
+  piece: *81
+- !ruby/object:Cell
+  location: *82
+  position: a1
+  piece: *83
+- !ruby/object:Cell
+  location: *84
+  position: b1
+  piece: *85
+- !ruby/object:Cell
+  location: *86
+  position: c1
+  piece: *87
+- !ruby/object:Cell
+  location: *88
+  position: d1
+  piece: *89
+- !ruby/object:Cell
+  location: *90
+  position: e1
+  piece: *91
+- !ruby/object:Cell
+  location: *92
+  position: f1
+  piece: *93
+- !ruby/object:Cell
+  location: *94
+  position: g1
+  piece: *95
+- !ruby/object:Cell
+  location: *96
+  position: h1
+  piece: *97
+last_move: a2 a4

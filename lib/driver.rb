@@ -17,7 +17,7 @@ class Logic
     @player2 = nil
     @cur_player = nil
     @dummy_board = nil
-    @last_move = 'd7 d5'
+    @last_move = ''
   end
 
   def init_board
@@ -41,6 +41,11 @@ class Logic
     not_empty?(node) &&
       belongs_to?(node) &&
       movable?(node)
+  end
+
+  def send_moves(input)
+    node = @board.grid[@board.find_cell(input)]
+    get_moves(node).reduce(&:+)
   end
 
   def move_legal?(start, dest)

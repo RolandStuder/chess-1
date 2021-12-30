@@ -1,11 +1,17 @@
 require_relative 'display'
 require_relative 'driver'
+require_relative 'loader'
 
 class Game
   include Display
+  include Loader
   def initialize
     @driver = Logic.new
-    @id = nil
+    @id = generate_id
+  end
+
+  def generate_id
+    Array.new(5).map{rand(1..9)}.join
   end
 
   def get_grid
@@ -21,17 +27,19 @@ class Game
 
   def make_board
     @driver.init_board
+    make_players
   end
 
   def call_inputs
     input1 = @driver.select_piece
+    display(@driver.send_moves(input1))
     input2 = @driver.select_move(input1)
     [input1, input2]
   end
 
-  def display
+  def display(moves = [])
     grid = get_grid
-    display_grid(grid)
+    display_grid(grid, moves)
   end
 
   def send_inputs
@@ -39,9 +47,13 @@ class Game
     @driver.receive_input(inputs[0], inputs[1])
   end
 
+  def game_type
+    input = type_input
+    input == '1' ? make_board : load_game
+  end
+
   def play
-    @driver.init_board
-    make_players
+    game_type
     display
     loop do
       upgrade_possible?
@@ -57,7 +69,13 @@ class Game
       end
       send_inputs
       display
+      save?
     end
+  end
+
+  def save?
+    input = disp_save
+    save if input == '1'
   end
 
   def make_players

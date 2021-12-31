@@ -64,7 +64,7 @@ module Display
     puts 'Press 1 for 2 players'
     puts 'Press 2 for computer game'
     input = gets.chomp
-    until ['1', '2'].include?(input)
+    until %w[1 2].include?(input)
       puts 'Invalid entry, try again'
       input = gets.chomp
     end
@@ -83,11 +83,11 @@ module Display
     puts 'Enter n for Knight'
     puts 'Enter b for Bishop'
     input = gets.chomp.downcase
-     until /^[qrnb]$/.match?(input)
-      puts "invalid entry, try again!"
+    until /^[qrnb]$/.match?(input)
+      puts 'invalid entry, try again!'
       input = gets.chomp.downcase
-     end
-     input
+    end
+    input
   end
 
   def disp_winner(winner)
@@ -102,7 +102,7 @@ module Display
     puts 'Press 1 for a new game'
     puts 'Press 2 to load a previous game'
     input = gets.chomp
-    until ['1', '2'].include?(input)
+    until %w[1 2].include?(input)
       puts 'Invalid entry, try again'
       input = gets.chomp
     end

@@ -1,10 +1,5 @@
-require_relative 'pieces'
-require_relative 'board'
-require_relative 'player'
-require_relative 'cell'
 require_relative 'ruleset'
 require_relative 'special_moves'
-require 'pry-byebug'
 
 class Logic
   include Ruleset
@@ -79,19 +74,19 @@ class Logic
   end
 
   def select_piece
-    input = @cur_player.piece_select
+    input = @cur_player.piece_select(all_locations)
     until selection_valid?(input)
       puts 'The selected tile does not exist or is invalid or has no legal moves' if @cur_player.is_a? Human
-      input = @cur_player.piece_select
+      input = @cur_player.piece_select(all_locations)
     end
     input
   end
 
   def select_move(input)
-    move = @cur_player.move_select
+    move = @cur_player.move_select(moves_for_bot(input))
     until move_legal?(input, move)
       puts 'This is not a legal move! Please try again!' if @cur_player.is_a? Human
-      move = @cur_player.move_select
+      move = @cur_player.move_select(moves_for_bot(input))
     end
     move
   end
@@ -114,5 +109,14 @@ class Logic
 
   def winner
     update_turn.name
+  end
+
+  def all_locations
+    all_pcs.map { |x| x.position }
+  end
+
+  def moves_for_bot(input)
+    tile = @board.grid[@board.find_cell(input)]
+    get_moves(tile).reduce(&:+)
   end
 end

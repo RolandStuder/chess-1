@@ -1,5 +1,4 @@
 require_relative 'display'
-require_relative 'driver'
 require_relative 'loader'
 
 class Game
@@ -11,7 +10,7 @@ class Game
   end
 
   def generate_id
-    Array.new(5).map{rand(1..9)}.join
+    Array.new(5).map { rand(1..9) }.join
   end
 
   def get_grid
@@ -90,4 +89,4 @@ class Game
   end
 end
 
-Game.new.play
+# Game.new.play

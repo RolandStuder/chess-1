@@ -1,7 +1,4 @@
-require_relative 'cell'
-require_relative 'pieces'
 require_relative 'an_encoder'
-require 'pry-byebug'
 class Board
   include Encoder
   attr_reader :grid

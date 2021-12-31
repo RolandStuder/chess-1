@@ -8,12 +8,12 @@ class Player
 end
 
 class Human < Player
-  def piece_select
+  def piece_select(_position)
     puts "Player #{@name}, Please enter a #{@color.capitalize} piece to select"
     gets.chomp
   end
 
-  def move_select
+  def move_select(_moves)
     puts "Player #{@name}, Please enter a square to make a move"
     gets.chomp
   end
@@ -21,17 +21,16 @@ end
 
 class Bot < Player
   # aka the dumb bot!
-  def rand_select
-    rand1 = ('a'..'h').to_a.sample(1)[0]
-    rand2 = rand(1..8)
-    "#{rand1}#{rand2}"
+  def array_to_alpha(ar)
+    "#{('a'..'h').to_a[ar[1] - 1]}#{ar[0]}"
   end
 
-  def piece_select
-    rand_select
+  def piece_select(positions)
+    positions.sample(1)[0]
   end
 
-  def move_select
-    rand_select
+  def move_select(moves)
+    move = moves.sample(1)[0]
+    array_to_alpha(move)
   end
 end
